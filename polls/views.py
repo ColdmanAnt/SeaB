@@ -13,4 +13,5 @@ def SeaBattle_page(request):
 
 def mygift_page(request):
     context = {}
+    'aaaaa'
     return render(request, 'MyGifts.html', context)
