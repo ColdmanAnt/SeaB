@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Главная страница</title>
+    </head>
+    <body>
+        <h1>Eto project</h1>
+        {% include 'menu.html' %}
+        <hr>
+        <p> Приветствуем вас в нашей мини игре</p>
+        <ul>
+            <li> Авторы: {{ authors }}</li>
+            <li> Количество страниц: {{pages}}</li>
+        </ul>
+    </body>
+</html>
