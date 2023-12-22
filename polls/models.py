@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class History(models.Model):
+class Gift_History(models.Model):
     a = models.IntegerField()
 
 
