@@ -32,5 +32,5 @@ urlpatterns = [
     path('seabattle/', SeaBattle_page),
     path('mygifts/', mygift_page),
     path('login/', auth_views.LoginView.as_view()),
-    path('logout/', auth_views.LogoutView.as_view(next_page=settings.LOGOUT_REDIRECT_URL), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout')
 ]
