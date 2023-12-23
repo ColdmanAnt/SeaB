@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
+from Sea_battle import settings
 from polls.views import index_page, SeaBattle_page, mygift_page, registration, fields, users_page, edit_fields, settings_gift
 
 urlpatterns = [
@@ -31,4 +32,5 @@ urlpatterns = [
     path('seabattle/', SeaBattle_page),
     path('mygifts/', mygift_page),
     path('login/', auth_views.LoginView.as_view()),
+    path('logout/', auth_views.LogoutView.as_view(next_page=settings.LOGOUT_REDIRECT_URL), name='logout'),
 ]

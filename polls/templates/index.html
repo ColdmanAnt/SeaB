@@ -13,8 +13,13 @@
             <li> Авторы: {{ authors }}</li>
             <li> Количество страниц: {{pages}}</li>
         </ul>
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}">Выйти</a>
+        {% else %}
+        <br>
         <a href="/login/"> Войти</a>
         <br>
         <a href="/user/registration/"> Зарегестрироваться</a>
+        {% endif %}
     </body>
 </html>
