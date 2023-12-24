@@ -2,6 +2,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
+from polls.models import Gifts
+from polls.forms import GiftForm
+from django.contrib.auth.models import User
+
+
+all_users = User.objects.values()
+print(all_users)
+print(all_users[0]['username'])
 
 def index_page(request):
     context = {}
@@ -40,10 +48,13 @@ def registration(request):
 
 def fields(request):
     context = {}
+
     return render(request, 'fields.html', context)
 
 def users_page(request):
     context = {}
+    all_users = User.objects.values()
+    context['users'] = all_users
     return render(request, 'users.html', context)
 
 def edit_fields(request):
@@ -53,3 +64,17 @@ def edit_fields(request):
 def settings_gift(request):
     context = {}
     return render(request, 'settings_gift.html', context)
+
+def create_gift(request):
+    context = {}
+
+    if request.method == "POST":
+        form = GiftForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            record = Gifts(name=name, description=description)
+            record.save()
+
+
+    return render(request, 'Creategift.html', context)

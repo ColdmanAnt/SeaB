@@ -7,5 +7,17 @@
 <body>
     {% include 'menu.html' %}
     <p> Список пользователей</p>
+    <table border="1px">
+        <tr>
+            <td>User id</td>
+            <td>username</td>
+        </tr>
+        {% for user in users %}
+            <tr>
+                <td> {{ user.id }}</td>
+                <td> {{ user.username }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>

@@ -1,7 +1,10 @@
 from django.db import models
 
 
-class Gift_History(models.Model):
+class Gift1_History(models.Model):
     a = models.IntegerField()
 
+class Gifts(models.Model):
+    name = models.CharField()
+    description = models.CharField()
 
