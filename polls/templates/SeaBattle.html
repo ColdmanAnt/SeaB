@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Морской бой</title>
+{% extends 'base_user.html' %}
 
-</head>
-<body>
-    {% include 'menu.html' %}
-    <p> Все поля которые вам доступны:</p>
-    <button>Начать игру</button>
-</body>
-</html>
+{% block content %}
+    <div class="row mt-5">
+        <div class="col mt-3">
+            <p> Все поля которые вам доступны:</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+           <button type="button" class="btn btn-primary">Начать игру</button>
+        </div>
+    </div>
+{% endblock %}

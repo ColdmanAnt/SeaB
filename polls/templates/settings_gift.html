@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Настройка призов</title>
-</head>
-<body>
-    {% include 'menu.html' %}
-    <p> Список призов</p>
+{% extends 'base_admin.html' %}
 
-    <a href="/creategift/"> <input type="submit" value="Создать приз"></a>
-</body>
-</html>
+{% block content %}
+    <div class="row mt-5">
+        <div class="col mt-3">
+            <p> Список призов</p>
+
+            <a href="/creategift/"> <input type="submit" value="Создать приз"></a>
+        </div>
+    </div>
+{% endblock %}

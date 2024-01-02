@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Игровые поля</title>
-</head>
-<body>
-    {% include 'menu.html' %}
-    <p> Список игровых полей:</p>
-</body>
-</html>
+{% extends 'base_admin.html' %}
+
+{% block content %}
+    <div class="row mt-5">
+        <div class="col mt-3">
+            <p> Список игровых полей:</p>
+        </div>
+    </div>
+{% endblock %}
