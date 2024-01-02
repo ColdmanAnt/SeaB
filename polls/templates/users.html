@@ -1,23 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Пользователи</title>
-</head>
-<body>
-    {% include 'menu.html' %}
-    <p> Список пользователей</p>
-    <table border="1px">
-        <tr>
-            <td>User id</td>
-            <td>username</td>
-        </tr>
-        {% for user in users %}
-            <tr>
-                <td> {{ user.id }}</td>
-                <td> {{ user.username }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+{% extends 'base_admin.html' %}
+
+{% block content %}
+    <div class="row mt-5">
+        <div class="col mt-3">
+            <div class="card">
+                <div class="card-header">
+                    <p><b> Список пользователей </b></p>
+                </div>
+                <div class="card-body">
+                <table class="table table-striped">
+                    <tr>
+                        <td><b>User id</b></td>
+                        <td><b>username</b></td>
+                    </tr>
+                    {% for user in users %}
+                        <tr>
+                            <td> {{ user.id }}</td>
+                            <td> {{ user.username }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

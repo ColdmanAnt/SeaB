@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'polls',
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -73,12 +74,8 @@ WSGI_APPLICATION = 'Sea_battle.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SeaBattle',
-        'USER': 'FoxErLis',
-        'PASSWORD': 'xPloit2208',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

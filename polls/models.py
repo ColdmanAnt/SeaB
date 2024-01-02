@@ -5,6 +5,6 @@ class Gift1_History(models.Model):
     a = models.IntegerField()
 
 class Gifts(models.Model):
-    name = models.CharField()
-    description = models.CharField()
+    name = models.CharField(max_length=10)
+    description = models.CharField(max_length=10)
 
