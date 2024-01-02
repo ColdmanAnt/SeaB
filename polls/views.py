@@ -7,10 +7,6 @@ from polls.forms import GiftForm
 from django.contrib.auth.models import User
 
 
-all_users = User.objects.values()
-print(all_users)
-print(all_users[0]['username'])
-
 def index_page(request):
     context = {}
     context['authors'] = 'Anton and Stanislav'
@@ -22,6 +18,7 @@ def index_page(request):
 def SeaBattle_page(request):
     context = {}
     return render(request, 'SeaBattle.html', context)
+
 
 @login_required
 def mygift_page(request):
@@ -46,10 +43,12 @@ def registration(request):
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+
 def fields(request):
     context = {}
 
     return render(request, 'fields.html', context)
+
 
 def users_page(request):
     context = {}
@@ -57,13 +56,16 @@ def users_page(request):
     context['users'] = all_users
     return render(request, 'users.html', context)
 
+
 def edit_fields(request):
     context = {}
     return render(request, 'edit_fields.html', context)
 
+
 def settings_gift(request):
     context = {}
     return render(request, 'settings_gift.html', context)
+
 
 def create_gift(request):
     context = {}
@@ -75,6 +77,5 @@ def create_gift(request):
             description = form.cleaned_data['description']
             record = Gifts(name=name, description=description)
             record.save()
-
 
     return render(request, 'Creategift.html', context)

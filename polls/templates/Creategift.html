@@ -8,9 +8,9 @@
         <form method="post" action="/creategift/">
             {% csrf_token %}
             <label>Введите название приза</label>
-            <input type="text" required name="name">
+            <input type="text" required maxlength="20" name="name">
             <label>Введите опизание приза</label>
-            <input type="text" required name="description">
+            <input type="text" required maxlength="200" name="description">
             <input type="submit" value="Создать">
         </form>
     </body>
