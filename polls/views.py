@@ -1,4 +1,5 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
@@ -17,14 +18,20 @@ def index_page(request):
 @login_required
 def SeaBattle_page(request):
     context = {}
-    return render(request, 'SeaBattle.html', context)
+    boards = Board.objects.all()
+    game_boards = []
+    for board in boards:
+        if request.user.id in board.users_id:
+            game_boards.append(board)
+    context['boards'] = game_boards
+    return render(request, 'user/SeaBattle.html', context)
 
 
 @login_required
 def mygift_page(request):
     context = {}
     'aaaaa'
-    return render(request, 'MyGifts.html', context)
+    return render(request, 'user/MyGifts.html', context)
 
 
 def registration(request):
@@ -44,48 +51,59 @@ def registration(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 
+def check_admin(request):
+    return request.user.is_superuser
+
+
+@staff_member_required
 def fields(request):
     context = {}
     context['boards'] = Board.objects.all()
-    return render(request, 'fields.html', context)
+    return render(request, 'admin/fields.html', context)
 
+@staff_member_required
 def create_board(request):
     context = {}
     all_users = User.objects.values()
     context['users'] = all_users
+    description = '''
+                web-игра морской бой. За каждую
+                покупку на определенную сумму, будут начисляться бонусные
+                выстрелы. Эти выстрелы можно тратить на поле морского боя и,
+                если вы попадете в корабль, то получаете какой-либо гарантированный приз.
+                '''
+    context['description'] = description
     if request.method == "POST":
-        form = GiftForm(request.POST)
+        form = BoardForm(request.POST)
         if form.is_valid():
-            users_id = form.cleaned_data['users_id']
+            users_id = []
+            user = form.cleaned_data['user']
+            users_id.append(user)
             name = form.cleaned_data['name']
-            description = '''
-            web-игра морской бой. За каждую
-            покупку на определенную сумму, будут начисляться бонусные
-            выстрелы. Эти выстрелы можно тратить на поле морского боя и,
-            если вы попадете в корабль, то получаете какой-либо гарантированный приз.
-            '''
             size = form.cleaned_data['size']
             record = Board(name=name, size=size, users_id=users_id)
             record.save()
-    return render(request, 'create_board.html', context)
+    return render(request, 'admin/create_board.html', context)
+
+@staff_member_required
 def users_page(request):
     context = {}
     all_users = User.objects.values()
     context['users'] = all_users
-    return render(request, 'users.html', context)
+    return render(request, 'admin/users.html', context)
 
-
+@staff_member_required
 def edit_fields(request):
     context = {}
-    return render(request, 'edit_fields.html', context)
+    return render(request, 'admin/edit_fields.html', context)
 
-
+@staff_member_required
 def settings_gift(request):
     context = {}
     context['history'] = Gifts.objects.all()
-    return render(request, 'settings_gift.html', context)
+    return render(request, 'admin/settings_gift.html', context)
 
-
+@staff_member_required
 def create_gift(request):
     context = {}
 
@@ -97,4 +115,4 @@ def create_gift(request):
             record = Gifts(name=name, description=description)
             record.save()
 
-    return render(request, 'Creategift.html', context)
+    return render(request, 'admin/Creategift.html', context)

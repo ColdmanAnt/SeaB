@@ -22,3 +22,6 @@ class BoardForm(forms.Form):
         max_value=12,
         min_value=4
     )
+    user = forms.IntegerField(
+        label='Введите id пользователя которого хотите добавить'
+    )

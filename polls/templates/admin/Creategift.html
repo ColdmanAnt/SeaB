@@ -1,4 +1,4 @@
-{% extends 'base_admin.html' %}
+{% extends 'base/base_admin.html' %}
 
 {% block content %}
     <div class="row mt-5">
@@ -8,23 +8,20 @@
                     <p><b> Создание приза </b></p>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'createboard' %}">
+                    <form method="post" action="/creategift/">
                         {% csrf_token %}
                             <div class="mb-3 row">
                                 <div class="col-4">
-                                    <label>Введите название игрового поля</label>
+                                    <label>Введите название приза</label>
                                 </div>
                                 <div class="col-8">
                                     <input type="text" required maxlength="20" name="name">
                                 </div>
                                 <div class="col-4">
-                                    <label>опизание игры</label>
+                                    <label>Введите опизание приза</label>
                                 </div>
                                 <div class="col-8">
-                                    <p> {{ description }}</p>
-                                </div>
-                                <div class="col-8">
-                                    <input type="number" required max="12" min="4" name="size">
+                                    <input type="text" required maxlength="200" name="description">
                                 </div>
                                 <div class="col-4">
                                     <input type="submit" class="btn btn-primary" value="Создать">

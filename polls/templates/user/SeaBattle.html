@@ -1,0 +1,31 @@
+{% extends 'base/base_user.html' %}
+
+{% block content %}
+    <div class="row mt-5">
+        <div class="col mt-3">
+            <p> Все поля которые вам доступны:</p>
+        </div>
+        <div class="card-body">
+
+        <table class="table table-striped">
+            <tr>
+                <td><b>Board id</b></td>
+                <td><b>Board name</b></td>
+                <td><b>Board size</b></td>
+            </tr>
+            {% for board in boards %}
+                <tr>
+                    <td> {{ board.id }}</td>
+                    <td> {{ board.name }}</td>
+                    <td> {{ board.size }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+           <button type="button" class="btn btn-primary">Начать игру</button>
+        </div>
+    </div>
+{% endblock %}
