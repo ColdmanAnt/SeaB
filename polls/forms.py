@@ -1,8 +1,5 @@
 from django import forms
 
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-
 
 class GiftForm(forms.Form):
     description = forms.CharField(
@@ -12,4 +9,16 @@ class GiftForm(forms.Form):
     name = forms.CharField(
         label='Введите описание приза ',
         max_length=20
+    )
+
+
+class BoardForm(forms.Form):
+    name = forms.CharField(
+        label='Введите описание приза ',
+        max_length=20
+    )
+    size = forms.IntegerField(
+        label='Введите размеры приза',
+        max_value=12,
+        min_value=4
     )

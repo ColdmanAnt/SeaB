@@ -1,11 +1,38 @@
 {% extends 'base_admin.html' %}
-
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
-            <p> Список призов</p>
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <p><b> Список призов </b></p>
+                        </div>
+                        <div class="col">
+                            <a href="/creategift/"> <input type="submit" class="btn btn-primary" value="Создать приз"></a>
+                        </div>
+                    </div>
 
-            <a href="/creategift/"> <input type="submit" value="Создать приз"></a>
+                </div>
+
+                <div class="card-body">
+
+                <table class="table table-striped">
+                    <tr>
+                        <td><b>Gift id</b></td>
+                        <td><b>Gift name</b></td>
+                        <td><b>Gift description</b></td>
+                    </tr>
+                    {% for gift in history %}
+                        <tr>
+                            <td> {{ gift.id }}</td>
+                            <td> {{ gift.name }}</td>
+                            <td> {{ gift.description }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

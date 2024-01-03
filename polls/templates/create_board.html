@@ -8,20 +8,23 @@
                     <p><b> Создание приза </b></p>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="/creategift/">
+                    <form method="post" action="{% url 'createboard' %}">
                         {% csrf_token %}
                             <div class="mb-3 row">
                                 <div class="col-4">
-                                    <label>Введите название приза</label>
+                                    <label>Введите название игрового поля</label>
                                 </div>
                                 <div class="col-8">
                                     <input type="text" required maxlength="20" name="name">
                                 </div>
                                 <div class="col-4">
-                                    <label>Введите опизание приза</label>
+                                    <label>опизание игры</label>
                                 </div>
                                 <div class="col-8">
-                                    <input type="text" required maxlength="200" name="description">
+                                    <p> {{ description }}</p>
+                                </div>
+                                <div class="col-8">
+                                    <input type="number" required max="12" min="4" name="size">
                                 </div>
                                 <div class="col-4">
                                     <input type="submit" class="btn btn-primary" value="Создать">
