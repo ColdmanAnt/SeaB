@@ -14,13 +14,11 @@ def index_page(request):
     return render(request, 'index.html', context)
 
 
-@login_required
 def SeaBattle_page(request):
     context = {}
     return render(request, 'SeaBattle.html', context)
 
 
-@login_required
 def mygift_page(request):
     context = {}
     'aaaaa'
