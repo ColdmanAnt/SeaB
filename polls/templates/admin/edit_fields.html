@@ -3,7 +3,96 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
-            <p> Редактор </p>
+            <div class="card">
+                <div class="card-header">
+                    <p><b> Создание приза </b></p>
+                </div>
+                <div class="card-body">
+                    <form method="post" action='/editfields/{{ board.id }}/info'>
+                        {% csrf_token %}
+                            <div class="mb-3 row">
+                                <div class="col-4">
+                                    <label>Название поля:</label>
+                                </div>
+                                <div class="col-8">
+                                    <p> {{ board.name }}</p>
+                                </div>
+                                <div class="col-4">
+                                    <label>Изменить название игрового поля:</label>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" required maxlength="20" name="name">
+                                </div>
+                                <div class="col-8">
+                                    <div class="col-4">
+                                        <label>Опизание игры:</label>
+                                        <br>
+                                        <br>
+                                        <p> {{ description }}</p>
+                                    </div>
+
+                                </div>
+                                <div class="col-4">
+                                    <label>Размерность поля:</label>
+                                </div>
+                                <div class="col-8">
+                                    <p> {{ board.size }}</p>
+                                </div>
+                                <div class="col-8">
+                                    <div class="col-4">
+                                        <label>Изменить размер поля:</label>
+                                        <br>
+                                        <input type="number" required max="12" min="4" name="size">
+                                    </div>
+                                </div>
+                                <p> Список пользователей:</p>
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>User id</b></td>
+                                            <td><b>username</b></td>
+                                        </tr>
+                                        {% for user in array_users %}
+                                            <tr>
+                                                <td> {{ user.id }}</td>
+                                                <td> {{ user.username }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
+                                <div class="col-8">
+                                    <div class="col-4">
+                                        <label>Добавить пользователя по id</label>
+                                        <br>
+                                        <input type="number" required name="user">
+
+                                    </div>
+                                </div>
+                                <br>
+                                <p> Список пользователей:</p>
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td><b>User id</b></td>
+                                            <td><b>username</b></td>
+                                        </tr>
+                                        {% for user in users %}
+                                            <tr>
+                                                <td> {{ user.id }}</td>
+                                                <td> {{ user.username }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
+                                <div class="col-4">
+                                    <input type="submit" class="btn btn-primary" value="Сохранить">
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

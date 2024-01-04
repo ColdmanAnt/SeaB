@@ -12,20 +12,24 @@
                 <td><b>Board id</b></td>
                 <td><b>Board name</b></td>
                 <td><b>Board size</b></td>
+                <td><b> Sea Battle</b></td>
             </tr>
             {% for board in boards %}
                 <tr>
                     <td> {{ board.id }}</td>
                     <td> {{ board.name }}</td>
                     <td> {{ board.size }}</td>
+                    <td>
+                        <div class="row">
+                        <div class="col">
+                           <a href="{% url 'battle' %}"> <input type="submit" class="btn btn-primary" value="начать игру"></a>
+                        </div>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-           <button type="button" class="btn btn-primary">Начать игру</button>
-        </div>
-    </div>
+
 {% endblock %}

@@ -19,15 +19,16 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from Sea_battle import settings
-from polls.views import index_page, SeaBattle_page, mygift_page, registration, fields, users_page, edit_fields, settings_gift, create_gift,create_board
+from polls.views import index_page, SeaBattle_page, mygift_page, registration, fields, users_page, edit_fields, settings_gift, create_gift,create_board, battle_page
 
 urlpatterns = [
     path('createboard',create_board, name='createboard'),
+    path('editfields/<int:board_id>/info', edit_fields, name='editfields'),
+    path('battle', battle_page, name='battle'),
     path('creategift/',create_gift),
     path('settingsgift/', settings_gift),
-    path('editfields/', edit_fields),
     path('users/', users_page),
-    path('fields/', fields),
+    path('fields/', fields, name="fields"),
     path('user/registration/', registration),
     path('admin/', admin.site.urls),
     path('', index_page),

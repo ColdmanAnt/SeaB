@@ -25,3 +25,8 @@ class BoardForm(forms.Form):
     user = forms.IntegerField(
         label='Введите id пользователя которого хотите добавить'
     )
+
+class EditForm(forms.Form):
+    number = forms.IntegerField(
+        label='Введите id поля которого хотите редактировать',
+    )
