@@ -1,0 +1,71 @@
+{% extends 'base/base_admin.html' %}
+{% load static %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <div class="row mt-5">
+        <div class="col mt-3">
+            <div class="card">
+                <div class="card-header">
+                    <p><b> Создание приза </b></p>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <p> Список кораблей на данном поле:</p>
+                    </div>
+                    <div class="card-body">
+                <table class="table table-striped">
+                    <tr>
+                        <td><b>Ship x</b></td>
+                        <td><b> Ship y</b></td>
+                        <td><b> Ship gift id</b></td>
+                    </tr>
+                    {% for ship in ships %}
+                        <tr>
+                            <td> {{ ship.x }}</td>
+                            <td> {{ ship.y }}</td>
+                            <td> {{ ship.gift_id }}</td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+                    <form method="post" action="/add_ship/{{ board.id }}">
+                        {% csrf_token %}
+                            <div class="mb-3 row">
+                                <div class="col-12">
+                                    <label>Введите координаты корабля</label>
+                                </div>
+                                <div class="col-4">
+                                    <label>Введитe x</label>
+                                    <br>
+                                    <input type="number" max="{{ board.size }}" min="1" name="x">
+                                    <br>
+                                    <label>Введитe y</label>
+                                    <br>
+                                    <input type="number" max="{{ board.size }}" min="1" name="y"><!--
+                                     <label>Выберите приз</label>
+                                    <br>
+                                    <script>
+                                        $(document).ready(function() {
+                                        $('.js-example-basic-single').select2();
+                                           });
+                                    </script>
+                                    <select class="js-example-basic-single" name="state">
+                                      {% for gift in gifts %}
+                                            <option value='1'> {{ gift.name }}</option>
+                                        {% endfor %}
+                                    </select>-->
+                                </div>
+
+                            </div>
+
+                        <div class="col-4">
+                                            <input type="submit" class="btn btn-primary" value="Создать">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

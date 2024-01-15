@@ -1,5 +1,11 @@
+from polls.models import Gifts
 from django import forms
 
+def get_gift():
+    gifts = Gifts.objects.all()
+    return gifts
+
+INTEGER_CHOICES= [gift.id for gift in get_gift()]
 
 class GiftForm(forms.Form):
     description = forms.CharField(
@@ -22,11 +28,16 @@ class BoardForm(forms.Form):
         max_value=12,
         min_value=4
     )
-    user = forms.IntegerField(
-        label='Введите id пользователя которого хотите добавить'
+    user = forms.CharField(
+        label='Введите id пользователя которого хотите добавить',
+        max_length=20
     )
 
 class EditForm(forms.Form):
     number = forms.IntegerField(
         label='Введите id поля которого хотите редактировать',
     )
+
+class ShipForm(forms.Form):
+    x = forms.IntegerField()
+    y = forms.IntegerField()

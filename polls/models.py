@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
@@ -11,10 +12,32 @@ class Gifts(models.Model):
     description = models.CharField()
 
 
+class GameBoard(models.Model):
+    size = models.IntegerField()
+    name = models.CharField()
+    users_id = ArrayField(
+        models.IntegerField(blank=True),
+    )
+
 class Board(models.Model):
     size = models.IntegerField()
     name = models.CharField()
     users_id = ArrayField(
         models.IntegerField(blank=True),
     )
+    ships = models.Choices
+
+
+class Ship(models.Model):
+
+    board_id=models.IntegerField()
+    x = models.IntegerField()
+    y = models.IntegerField()
+    gift_id = models.IntegerField(default=1)
+    winner_id = models.ForeignKey(to=User, on_delete=models.CASCADE, default=1)
+
+
+class BoardAccess(models.Model):
+    user_id = models.ForeignKey(to=User, on_delete=models.CASCADE, default=1)
+    board_id = models.IntegerField()
 

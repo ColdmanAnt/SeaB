@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
-from polls.models import Gifts, Gift1_History, Board
-from polls.forms import GiftForm, BoardForm, EditForm
+from polls.models import Gifts, Gift1_History, Board, Ship
+from polls.forms import GiftForm, BoardForm, EditForm, ShipForm
 from django.contrib.auth.models import User
 
 
@@ -56,11 +56,38 @@ def check_admin(request):
 
 
 @staff_member_required
+def delete_field(request, board_id):
+    context = {}
+    board = Board.objects.get(id=board_id)
+    board.delete()
+    return render(request, 'admin/fields.html', context)
+
+
+@staff_member_required
 def fields(request):
     context = {}
     context['boards'] = Board.objects.all()
     return render(request, 'admin/fields.html', context)
 
+def add_ship(request, board_id):
+    context = {}
+    gifts = Gifts.objects.all()
+    context['gifts'] = gifts
+    ships = Ship.objects.filter(board_id=board_id)
+    context['ships'] = ships
+    board = Board.objects.get(id=board_id)
+    context['board'] = board
+    print(board.size)
+    if request.method == "POST":
+        form = ShipForm(request.POST)
+        if form.is_valid():
+            x = form.cleaned_data['x']
+            y = form.cleaned_data['y']
+            record = Ship(x=x, y=y, board_id=board_id)
+            record.save()
+        else:
+            print('aaaaa')
+    return render(request,'admin/AddShip.html', context)
 @staff_member_required
 def create_board(request):
     context = {}
@@ -78,12 +105,15 @@ def create_board(request):
         if form.is_valid():
             users_id = []
             user = form.cleaned_data['user']
-            users_id.append(user)
+            users = list(user.split(','))
+            users_id += users
             name = form.cleaned_data['name']
             size = form.cleaned_data['size']
             record = Board(name=name, size=size, users_id=users_id)
             record.save()
+
     return render(request, 'admin/create_board.html', context)
+
 
 @staff_member_required
 def users_page(request):
@@ -91,6 +121,7 @@ def users_page(request):
     all_users = User.objects.values()
     context['users'] = all_users
     return render(request, 'admin/users.html', context)
+
 
 @staff_member_required
 def edit_fields(request, board_id):
@@ -122,11 +153,13 @@ def edit_fields(request, board_id):
             board.save()
     return render(request, 'admin/edit_fields.html', context)
 
+
 @staff_member_required
 def settings_gift(request):
     context = {}
     context['history'] = Gifts.objects.all()
     return render(request, 'admin/settings_gift.html', context)
+
 
 @staff_member_required
 def create_gift(request):
@@ -142,6 +175,22 @@ def create_gift(request):
 
     return render(request, 'admin/Creategift.html', context)
 
-def battle_page(request):
+
+def battle_page(request, board_id):
     context = {}
+    description = '''
+                web-игра морской бой. За каждую\n
+                покупку на определенную сумму, будут начисляться бонусные\n
+                выстрелы. Эти выстрелы можно тратить на поле морского боя и,\n
+                если вы попадете в корабль, то получаете какой-либо гарантированный приз.
+                Совершайте выстрелы и выигрывайте призы, только учтите, что выстрелы ограничены
+                '''
+    context['description'] = description
+    board = Board.objects.get(id=board_id)
+    ships = Ship.objects.filter(board_id=board_id)
+    field = ['1'] * board.size * board.size
+    for ship in ships:
+        field[(ship.y-1) * board.size + ship.x] = ship.gift_id
+    context['field'] = field
+    context['board'] = board
     return render(request, 'user/battle.html', context)
