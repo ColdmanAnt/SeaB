@@ -29,7 +29,6 @@ class Board(models.Model):
 
 
 class Ship(models.Model):
-
     board_id=models.IntegerField()
     x = models.IntegerField()
     y = models.IntegerField()

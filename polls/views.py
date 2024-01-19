@@ -111,7 +111,6 @@ def create_board(request):
             size = form.cleaned_data['size']
             record = Board(name=name, size=size, users_id=users_id)
             record.save()
-
     return render(request, 'admin/create_board.html', context)
 
 
