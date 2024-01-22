@@ -19,13 +19,36 @@
                         <td><b>Ship x</b></td>
                         <td><b> Ship y</b></td>
                         <td><b> Ship gift id</b></td>
+                        <td><b> Delete </b></td>
                     </tr>
                     {% for ship in ships %}
                         <tr>
                             <td> {{ ship.x }}</td>
                             <td> {{ ship.y }}</td>
                             <td> {{ ship.gift_id }}</td>
+                            <td><a href="/delete/{{ ship.id }}">Удалить</a></td>
 
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+                    <div class="card-body">
+                    <div>
+                        <p> Список призов:</p>
+                    </div>
+                    <div class="card-body">
+
+                <table class="table table-striped">
+                    <tr>
+                        <td><b>Gift id</b></td>
+                        <td><b>Gift name</b></td>
+                        <td><b>Gift description</b></td>
+                    </tr>
+                    {% for gift in gifts %}
+                        <tr>
+                            <td> {{ gift.id }}</td>
+                            <td> {{ gift.name }}</td>
+                            <td> {{ gift.description }}</td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -43,7 +66,10 @@
                                     <br>
                                     <label>Введитe y</label>
                                     <br>
-                                    <input type="number" max="{{ board.size }}" min="1" name="y"><!--
+                                    <input type="number" max="{{ board.size }}" min="1" name="y">
+                                    <br>
+                                    <label>Введитe id приза</label>
+                                    <input type="number"  name="gift_id"><!--
                                      <label>Выберите приз</label>
                                     <br>
                                     <script>

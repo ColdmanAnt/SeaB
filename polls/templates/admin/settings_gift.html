@@ -22,12 +22,14 @@
                         <td><b>Gift id</b></td>
                         <td><b>Gift name</b></td>
                         <td><b>Gift description</b></td>
+                        <td><b>Delete</b></td>
                     </tr>
                     {% for gift in history %}
                         <tr>
                             <td> {{ gift.id }}</td>
                             <td> {{ gift.name }}</td>
                             <td> {{ gift.description }}</td>
+                            <td><a href="/delete/{{ gift.id }}/gift">Удалить</a></td>
                         </tr>
                     {% endfor %}
                 </table>

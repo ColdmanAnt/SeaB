@@ -21,6 +21,7 @@
                         <td><b> Edit Board</b></td>
                         <td><b> Delete Board</b></td>
                         <td><b> Add Ship</b></td>
+                        <td><b> Add shot and user</b></td>
                     </tr>
                     {% for board in boards %}
                         <tr>
@@ -29,7 +30,8 @@
                             <td> {{ board.size }}</td>
                             <td><a href='/editfields/{{ board.id }}/info' style="color: black">Перейти</a></td>
                             <td><a href="/delete/{{ board.id }}">Удалить</a></td>
-                            <td><a href="/add_ship/{{ board.id }}">Добавить</a></td>
+                            <td><a href="/add_ship/{{ board.id }}">Изменить</a></td>
+                            <td><a href="/add_shots/{{ board.id }}"> Изменить</a> </td>
 
                         </tr>
                     {% endfor %}

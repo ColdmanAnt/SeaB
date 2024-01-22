@@ -1,6 +1,17 @@
 {% extends 'base/base_admin.html' %}
-
+{% load static %}
 {% block content %}
+<script>
+$(document).ready(function() {
+	fixTotalFormsNumber();
+	initiateControls();
+	hideDeletedExercises();
+
+});
+</script>
+<script>
+
+</script>
     <div class="row mt-5">
         <div class="col mt-3">
             <div class="card">
@@ -31,14 +42,6 @@
                                         <label>Введите размер поля:</label>
                                         <br>
                                         <input type="number" required max="12" min="4" name="size">
-                                    </div>
-                                </div>
-                                <div class="col-8">
-                                    <div class="col-4">
-                                        <label>Добавить пользователя по id, введите id пользователей, которых хотите добавить через ","</label>
-                                        <br>
-                                        <input type="text" required name="user">
-
                                     </div>
                                 </div>
                                 <br>

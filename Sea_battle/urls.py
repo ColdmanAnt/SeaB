@@ -17,12 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
-
+from polls import views
 from Sea_battle import settings
-from polls.views import index_page, SeaBattle_page, mygift_page, registration, fields, users_page, edit_fields, settings_gift, create_gift,create_board, battle_page,delete_field,add_ship
+from polls.views import index_page, SeaBattle_page, mygift_page, registration, fields, users_page, edit_fields, settings_gift,\
+    create_gift,create_board, battle_page,delete_field,add_ship, shots, delete_user_and_shots, delete_ship, delete_gift
 
 urlpatterns = [
-    path('add_ship/<int:board_id>', add_ship,name='add_ship'),
+    path('delete/<int:ship_id>', delete_ship, name='delete_ship'),
+    path('delete/<int:gift_id>/gift', delete_gift, name='delete_gift'),
+    path('delete/<int:access_id>/acc', delete_user_and_shots, name='delete_user_and_shots'),
+    path('add_shots/<int:board_id>', shots, name='add_shot'),
+    path('add_ship/<int:board_id>', add_ship, name='add_ship'),
     path('delete/<int:board_id>', delete_field, name='delete_field'),
     path('createboard',create_board, name='createboard'),
     path('editfields/<int:board_id>/info', edit_fields, name='editfields'),

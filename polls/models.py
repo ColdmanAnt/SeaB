@@ -19,17 +19,17 @@ class GameBoard(models.Model):
         models.IntegerField(blank=True),
     )
 
+
 class Board(models.Model):
     size = models.IntegerField()
     name = models.CharField()
     users_id = ArrayField(
         models.IntegerField(blank=True),
     )
-    ships = models.Choices
 
 
 class Ship(models.Model):
-    board_id=models.IntegerField()
+    board_id = models.IntegerField()
     x = models.IntegerField()
     y = models.IntegerField()
     gift_id = models.IntegerField(default=1)
@@ -37,6 +37,6 @@ class Ship(models.Model):
 
 
 class BoardAccess(models.Model):
-    user_id = models.ForeignKey(to=User, on_delete=models.CASCADE, default=1)
+    shots = models.IntegerField(default=2)
+    us = models.IntegerField()
     board_id = models.IntegerField()
-

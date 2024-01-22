@@ -1,0 +1,98 @@
+{% extends 'base/base_admin.html' %}
+{% block content %}
+    <div class="row mt-5">
+        <div class="col mt-3">
+            <div class="card">
+                <div class="card-header">
+                    <p><b> Список пользователей </b></p>
+                </div>
+                <div class="card-body">
+                <table class="table table-striped">
+                    <tr>
+                        <td><b>User id</b></td>
+                        <td><b>username</b></td>
+                    </tr>
+                    {% for user in users %}
+                        <tr>
+                            <td> {{ user.id }}</td>
+                            <td> {{ user.username }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <p><b> Список пользователей на данном поле </b></p>
+                </div>
+                <div class="card-body">
+                <table class="table table-striped">
+                    <tr>
+                        <td><b>User id</b></td>
+                        <td><b>username</b></td>
+                    </tr>
+                    {% for user in array_users %}
+                        <tr>
+                            <td> {{ user.id }}</td>
+                            <td> {{ user.username }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <p><b> количество выстрелов у пользователей </b></p>
+                </div>
+                <div class="card-body">
+                <table class="table table-striped">
+                    <tr>
+                        <td><b>User id</b></td>
+                        <td><b>Shots count</b></td>
+                        <td><b> Delete </b></td>
+                    </tr>
+                    {% for shot in access %}
+                        <tr>
+                            <td> {{ shot.us }}</td>
+                            <td> {{ shot.shots }}</td>
+                            <td><a href="/delete/{{ shot.id }}/acc">Удалить</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+
+                     <form method="post" action='/add_shots/{{ board.id }}'>
+                        {% csrf_token %}
+
+                                <div class="col-8">
+                                    <div class="col-4">
+                                        <label>Добавить пользователя по id</label>
+                                        <br>
+                                        <input type="number" required name="user">
+
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="col-4">
+                                        <label>Начислить выстрелы</label>
+                                        <br>
+                                        <input type="number" required name="shots">
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div class="col-4">
+                                    <input type="submit" class="btn btn-primary" value="Сохранить">
+                                </div>
+
+                    </form>
+                </div>
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

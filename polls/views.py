@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
-from polls.models import Gifts, Gift1_History, Board, Ship
-from polls.forms import GiftForm, BoardForm, EditForm, ShipForm
+from polls.models import Gifts, Board, Ship, BoardAccess
+from polls.forms import GiftForm, BoardForm, ShipForm, ShotForm
 from django.contrib.auth.models import User
 
 
@@ -64,10 +64,40 @@ def delete_field(request, board_id):
 
 
 @staff_member_required
+def delete_user_and_shots(request, access_id):
+    context = {}
+    access = BoardAccess.objects.all()
+    for acc in access:
+        if acc.id == access_id:
+            acc.delete()
+    return render(request, 'admin/addshot.html', context)
+
+
+@staff_member_required
+def delete_gift(request, gift_id):
+    context = {}
+    gift = Gifts.objects.get(id=gift_id)
+    ships = Ship.objects.all()
+    for ship in ships:
+        if ship.gift_id == gift_id:
+            ship.delete()
+    gift.delete()
+    return render(request, 'admin/settings_gift.html', context)
+
+@staff_member_required
+def delete_ship(request, ship_id):
+    context = {}
+    ship = Ship.objects.get(id=ship_id)
+    ship.delete()
+    return render(request, 'admin/AddShip.html', context)
+
+
+@staff_member_required
 def fields(request):
     context = {}
     context['boards'] = Board.objects.all()
     return render(request, 'admin/fields.html', context)
+
 
 def add_ship(request, board_id):
     context = {}
@@ -83,11 +113,14 @@ def add_ship(request, board_id):
         if form.is_valid():
             x = form.cleaned_data['x']
             y = form.cleaned_data['y']
-            record = Ship(x=x, y=y, board_id=board_id)
+            gift_id = form.cleaned_data['gift_id']
+            record = Ship(x=x, y=y, board_id=board_id, gift_id=gift_id)
             record.save()
         else:
             print('aaaaa')
-    return render(request,'admin/AddShip.html', context)
+    return render(request, 'admin/AddShip.html', context)
+
+
 @staff_member_required
 def create_board(request):
     context = {}
@@ -103,13 +136,9 @@ def create_board(request):
     if request.method == "POST":
         form = BoardForm(request.POST)
         if form.is_valid():
-            users_id = []
-            user = form.cleaned_data['user']
-            users = list(user.split(','))
-            users_id += users
             name = form.cleaned_data['name']
             size = form.cleaned_data['size']
-            record = Board(name=name, size=size, users_id=users_id)
+            record = Board(name=name, size=size, users_id=[])
             record.save()
     return render(request, 'admin/create_board.html', context)
 
@@ -145,8 +174,6 @@ def edit_fields(request, board_id):
     if request.method == "POST":
         form = BoardForm(request.POST)
         if form.is_valid():
-            user = form.cleaned_data['user']
-            board.users_id.append(user)
             board.name = form.cleaned_data['name']
             board.size = form.cleaned_data['size']
             board.save()
@@ -187,9 +214,42 @@ def battle_page(request, board_id):
     context['description'] = description
     board = Board.objects.get(id=board_id)
     ships = Ship.objects.filter(board_id=board_id)
-    field = ['1'] * board.size * board.size
-    for ship in ships:
-        field[(ship.y-1) * board.size + ship.x] = ship.gift_id
+    field = [''] * board.size * board.size
     context['field'] = field
     context['board'] = board
     return render(request, 'user/battle.html', context)
+
+
+@staff_member_required
+def shots(request, board_id):
+    context = {}
+    board = Board.objects.get(id=board_id)
+    users = User.objects.all()
+    access = BoardAccess.objects.all()
+    acc = []
+    for b in access:
+        if b.board_id == board_id:
+            acc.append(b)
+    context['access'] = acc
+    array_users = []
+    for user in users:
+        if user.id in board.users_id:
+            array_users.append(user)
+    context['array_users'] = array_users
+    context['users'] = users
+    context['board'] = board
+    if request.method == "POST":
+        form = ShotForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data['user']
+            board.users_id.append(user)
+            shot_count = form.cleaned_data['shots']
+            record = BoardAccess(shots=shot_count, board_id=board_id, us=user)
+            record.save()
+            board.save()
+        else:
+            print('nooo')
+
+            board.save()
+
+    return render(request, 'admin/addshot.html', context)
