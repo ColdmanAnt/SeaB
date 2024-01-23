@@ -33,10 +33,22 @@ class Ship(models.Model):
     x = models.IntegerField()
     y = models.IntegerField()
     gift_id = models.IntegerField(default=1)
-    winner_id = models.ForeignKey(to=User, on_delete=models.CASCADE, default=1)
+    winner_id = models.IntegerField(default=1)
 
 
 class BoardAccess(models.Model):
     shots = models.IntegerField(default=2)
     us = models.IntegerField()
     board_id = models.IntegerField()
+
+
+class GiftWinners(models.Model):
+    gift_id = models.IntegerField()
+    winner_id = models.IntegerField()
+
+
+class MyShots(models.Model):
+    x = models.IntegerField()
+    y = models.IntegerField()
+    user_id = models.IntegerField()
+    board_id = models.IntegerField(default=1)

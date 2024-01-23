@@ -31,10 +31,6 @@ class BoardForm(forms.Form):
         max_value=12,
         min_value=4
     )
-    user = forms.CharField(
-        label='Введите id пользователя которого хотите добавить',
-        max_length=20
-    )
 
 
 class EditForm(forms.Form):
@@ -51,3 +47,8 @@ class ShipForm(forms.Form):
 class ShotForm(forms.Form):
     shots = forms.IntegerField()
     user = forms.IntegerField()
+
+
+class BattleForm(forms.Form):
+    x = forms.IntegerField()
+    y = forms.IntegerField()

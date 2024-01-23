@@ -12,15 +12,66 @@
                     <p>{{ description }}</p>
                 </div>
                 <p> Размер доски: {{ board.size }}</p>
-
+                <p> Количество выстрелов: {{ access.shots }}</p>
                 <div class="card-body">
-                <script>
-                    int[][] arr = {{1, 2}, {3, 4}, {5, 6}};
-                    System.out.println(Arrays.deepToString(arr));
-                </script>
+                </div>
+                    <form method="post" action="/battle/{{ board.id }}/play">
+                        {% csrf_token %}
+                            <div class="mb-3 row">
+                                <div class="col-12">
+                                    <label>Введите координаты корабля</label>
+                                </div>
+                                <div class="col-4">
+                                    <label>Введитe x</label>
+                                    <br>
+                                    <input type="number" max="{{ board.size }}" min="1" name="x">
+                                    <br>
+                                    <label>Введитe y</label>
+                                    <br>
+                                    <input type="number" max="{{ board.size }}" min="1" name="y">
+                                    <br>
+                                </div>
+
+                            </div>
+
+                        {% if access.shots > 0 %}
+                        <div class="col-4">
+                            <input type="submit" class="btn btn-primary" value="Выстрелить">
+                        </div>
+                        {% else %}
+                            <a href="/">Выйти</a>
+                        {% endif %}
+                    </form>
+                    {% if action %}
+                        {{ action }}
+                    {% endif %}
+                <br>
+                <br>
+                    {% if win %}
+                        <ul>
+                            <p> Вы выйграли:</p>
+                            {% for w in win %}
+                                <li> {{ w.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                <br>
+                <br>
+                <br>
+                <br>
+                    {% if errors %}
+                        <ul>
+                            {% for error in errors %}
+                                <li> {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                <br>
+                <br>
+                <a href="/">Выйти</a>
+
+                </div>
                 </div>
             </div>
-        </div>
-     </div>
 {% endblock %}
 

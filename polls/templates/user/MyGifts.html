@@ -3,7 +3,24 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
-            <p> Список всех призов, которые у вас есть</p>
+            <p> Список всех призов, которые у вас есть:</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col mt-3">
+        <table class="table table-striped">
+            <tr>
+                <td><b>Gift name</b></td>
+                <td><b>Gift description</b></td>
+            </tr>
+            {% for gift in my_gifts %}
+                <tr>
+                    <td> {{ gift.name }}</td>
+                    <td> {{ gift.description }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
         </div>
     </div>
 {% endblock %}

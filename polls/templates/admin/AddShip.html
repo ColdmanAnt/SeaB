@@ -69,19 +69,8 @@
                                     <input type="number" max="{{ board.size }}" min="1" name="y">
                                     <br>
                                     <label>Введитe id приза</label>
-                                    <input type="number"  name="gift_id"><!--
-                                     <label>Выберите приз</label>
-                                    <br>
-                                    <script>
-                                        $(document).ready(function() {
-                                        $('.js-example-basic-single').select2();
-                                           });
-                                    </script>
-                                    <select class="js-example-basic-single" name="state">
-                                      {% for gift in gifts %}
-                                            <option value='1'> {{ gift.name }}</option>
-                                        {% endfor %}
-                                    </select>-->
+                                    <input type="number"  name="gift_id">
+
                                 </div>
 
                             </div>
@@ -89,6 +78,14 @@
                         <div class="col-4">
                                             <input type="submit" class="btn btn-primary" value="Создать">
                         </div>
+                        {% if errors %}
+                        <p> Найдены ошибки:</p>
+                        <ul>
+                            {% for error in errors %}
+                                <li> {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
                     </form>
                 </div>
             </div>
