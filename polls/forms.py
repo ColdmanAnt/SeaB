@@ -1,13 +1,16 @@
-from polls.models import Gifts
+from polls import models as md
 from django import forms
 
 
-def get_gift():
-    gifts = Gifts.objects.all()
-    return gifts
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = md.Image
+        fields = ['Img']
 
-
-INTEGER_CHOICES = [gift.id for gift in get_gift()]
+    Img = forms.ImageField(
+        label='Изображение',
+        widget=forms.FileInput()
+    )
 
 
 class GiftForm(forms.Form):
@@ -43,6 +46,7 @@ class ShipForm(forms.Form):
     x = forms.IntegerField()
     y = forms.IntegerField()
     gift_id = forms.IntegerField()
+
 
 class ShotForm(forms.Form):
     shots = forms.IntegerField()

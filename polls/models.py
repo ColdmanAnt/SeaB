@@ -7,6 +7,19 @@ class Gift1_History(models.Model):
     a = models.IntegerField()
 
 
+class Image(models.Model):
+    Img = models.ImageField(upload_to='images/', default='/media/images/gift_card.png')
+    gift_id = models.IntegerField()
+
+
+class MyResults(models.Model):
+    user = models.IntegerField()
+    board_id = models.IntegerField()
+    gifts_id = ArrayField(
+        models.IntegerField(blank=True),
+    )
+
+
 class Gifts(models.Model):
     name = models.CharField()
     description = models.CharField()
@@ -40,6 +53,7 @@ class BoardAccess(models.Model):
     shots = models.IntegerField(default=2)
     us = models.IntegerField()
     board_id = models.IntegerField()
+    start_shot = models.IntegerField()
 
 
 class GiftWinners(models.Model):

@@ -7,6 +7,14 @@
                 <div class="card-header">
                     <p><b> Создание приза </b></p>
                 </div>
+                {% if errors %}
+                <p> Найдены ошибки:</p>
+                    <ul>
+                        {% for error in errors %}
+                            <li> {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 <div class="card-body">
                     <form method="post" action='/editfields/{{ board.id }}/info'>
                         {% csrf_token %}
@@ -49,8 +57,8 @@
                                 <div class="card-body">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>User id</b></td>
-                                            <td><b>username</b></td>
+                                            <td><b>Id пользователя</b></td>
+                                            <td><b>Имя пользователя</b></td>
                                         </tr>
                                         {% for user in array_users %}
                                             <tr>
@@ -65,8 +73,8 @@
                                 <div class="card-body">
                                     <table class="table table-striped">
                                         <tr>
-                                            <td><b>User id</b></td>
-                                            <td><b>username</b></td>
+                                            <td><b>Id пользователя</b></td>
+                                            <td><b>Имя пользователя</b></td>
                                         </tr>
                                         {% for user in users %}
                                             <tr>

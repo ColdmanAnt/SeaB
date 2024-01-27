@@ -1,0 +1,23 @@
+{% extends 'base/base_admin.html' %}
+{% load static %}
+{% block content %}
+    <div class="row mt-5">
+        <div class="col mt-3">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                        <form method = "post" enctype="multipart/form-data">
+                          <div class="panel">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                          </div>
+                          <input type="submit" value="Загрузить">
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

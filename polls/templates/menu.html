@@ -1,9 +1,5 @@
 {% if request.user.is_superuser %}
-    <p>Меню: <a href="/">Главная</a> |
-    <a href="/fields/"> Поля</a>|
-    <a href="/settingsgift/"> Настройки призов</a>|
-    <a href="/editfields/"> Редактор полей</a>|
-    <a href="/users/"> пользователи</a>
+    <p><a href="/">Главная</a>
     {% if request.user.is_authenticated %}
     (Пользователь: {{ request.user.username}})
     {% endif %}
@@ -13,9 +9,7 @@
 {% endif %}
 
 {% if request.user.is_superuser == False %}
-    <p>Меню: <a href="/">Главная</a> |
-    <a href="/seabattle/"> Морской бой</a>|
-    <a href="/mygifts/"> Мои призы</a>
+    <p> <a href="/">Главная</a>
     {% if request.user.is_authenticated %}
     (Пользователь: {{ request.user.username}})
     {% endif %}

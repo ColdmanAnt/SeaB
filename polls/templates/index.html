@@ -98,36 +98,65 @@
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Eto project</a>
+            <a class="navbar-brand" href="/">Sea Battle</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/">Главная</a>
-                    </li>
                     {% if request.user.is_superuser %}
                         <li class="nav-item">
-                        <a class="nav-link" href="/fields/">Поля</a>
+                        <a class="nav-link" href="/fields/">Управление игровыми полями</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/settingsgift/">Настройки призов</a>
+                            <a class="nav-link" href="/settingsgift/">Управление призами</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/users/">Пользователи</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav justify-content-end">
+                        <li class="nav-item">
+                           <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-dark">Выйти</button>
+                            </form>
+                        </li>
+                    </ul>
                     {% endif %}
                     {% if request.user.is_superuser == False %}
+                    {% if request.user.is_authenticated %}
                         <li class="nav-item ">
                             <a class="nav-link" href="/seabattle/">Морской бой</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/mygifts/">Мои призы</a>
                         </li>
-                    {% endif %}
                 </ul>
+                    <ul class="navbar-nav justify-content-end">
+                        <li class="nav-item">
+                           <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-dark">Выйти</button>
+                            </form>
+                        </li>
+                    </ul>
+                    {% else %}
+                 </ul>
+                <ul class="navbar-nav justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login/">Войти</a>
+                        </li>
+                    </ul>
+                <ul class="navbar-nav justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/registration/"> Зарегестрироваться</a>
+                        </li>
+                    </ul>
+                    {% endif %}
+                    {% endif %}
+
             </div>
             <div>
 
@@ -135,28 +164,8 @@
         </div>
     </nav>
 </header>
-
-<div class="container">
-    <div class="row mt-5">
-        <div class="col mt-3">
-            <p> Приветствуем вас в нашей мини игре</p>
-            <ul>
-                <li> Авторы: {{ authors }}</li>
-                <li> Количество страниц/: {{pages}}</li>
-            </ul>
-            {% if request.user.is_authenticated %}
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">logout</button>
-            </form>
-            {% else %}
-            <br>
-            <a href="/login/"> Войти</a>
-            <br>
-            <a href="/user/registration/"> Зарегестрироваться</a>
-            {% endif %}
-        </div>
-    </div>
+<div align="center">
+    <img src="/media/images/ship4.jpg" class="img" width="700" alt="MISSING IMG">
 </div>
 
 {% block extra_js %}{% endblock %}
@@ -166,5 +175,10 @@
         crossorigin="anonymous">
 
 </script>
+<div align="center">
+    <small>
+      Copyright Anton and Stanislav. All Rights Reserved.
+    </small>
+</div>>
 </body>
 </html>

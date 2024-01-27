@@ -3,6 +3,14 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
+            {% if errors %}
+                <p> Найдены ошибки:</p>
+                    <ul>
+                        {% for error in errors %}
+                            <li> {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+            {% endif %}
         <div class="row">
                         <div class="col">
                             <p><b> Список игровых полей: </b></p>
@@ -15,13 +23,13 @@
             <div class="card-body">
                 <table class="table table-striped">
                     <tr>
-                        <td><b>Board id</b></td>
-                        <td><b>Board name</b></td>
-                        <td><b>Board size</b></td>
-                        <td><b> Edit Board</b></td>
-                        <td><b> Delete Board</b></td>
-                        <td><b> Add Ship</b></td>
-                        <td><b> Add shot and user</b></td>
+                        <td><b>Id поля</b></td>
+                        <td><b>Название поля</b></td>
+                        <td><b>Размер поля</b></td>
+                        <td><b>Редактировать поле</b></td>
+                        <td><b>Удалить поле</b></td>
+                        <td><b>Редактировать корабли</b></td>
+                        <td><b>Редактировать выстрелы пользователей</b></td>
                     </tr>
                     {% for board in boards %}
                         <tr>

@@ -1,18 +1,29 @@
 {% extends 'base/base_user.html' %}
 {% load static %}
 {% block content %}
+
+
+
     <div class="row mt-5">
         <div class="col mt-3">
+            {% if errors %}
+                <p> Найдены ошибки:</p>
+                    <ul>
+                        {% for error in errors %}
+                            <li> {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+            {% else %}
             <p> Все поля которые вам доступны:</p>
         </div>
         <div class="card-body">
 
         <table class="table table-striped">
             <tr>
-                <td><b>Board id</b></td>
-                <td><b>Board name</b></td>
-                <td><b>Board size</b></td>
-                <td><b> Sea Battle</b></td>
+                <td><b>Id поля</b></td>
+                <td><b>Название Поля</b></td>
+                <td><b>Размер Поля</b></td>
+                <td><b>Начать игру</b></td>
             </tr>
             {% for board in boards %}
                 <tr>
@@ -26,5 +37,5 @@
 
         </div>
     </div>
-
+{% endif %}
 {% endblock %}

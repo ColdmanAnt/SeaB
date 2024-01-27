@@ -3,6 +3,14 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
+        {% if errors %}
+                <p> Найдены ошибки:</p>
+                    <ul>
+                        {% for error in errors %}
+                            <li> {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+            {% else %}
             <p> Список всех призов, которые у вас есть:</p>
         </div>
     </div>
@@ -10,8 +18,8 @@
         <div class="col mt-3">
         <table class="table table-striped">
             <tr>
-                <td><b>Gift name</b></td>
-                <td><b>Gift description</b></td>
+                <td><b>Название приза</b></td>
+                <td><b>Описание приза</b></td>
             </tr>
             {% for gift in my_gifts %}
                 <tr>
@@ -23,4 +31,5 @@
 
         </div>
     </div>
+{% endif %}
 {% endblock %}

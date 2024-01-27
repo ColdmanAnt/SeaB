@@ -17,23 +17,26 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
-from polls import views
+from django.conf.urls.static import static
 from Sea_battle import settings
-from polls.views import index_page, SeaBattle_page, mygift_page, registration, fields, users_page, edit_fields, settings_gift,\
-    create_gift,create_board, battle_page,delete_field,add_ship, shots, delete_user_and_shots, delete_ship, delete_gift
+from polls.views import index_page, SeaBattle_page, mygift_page, registration, fields, users_page, edit_fields, \
+    settings_gift, \
+    create_gift, create_board, battle_page, delete_field, add_ship, shots, delete_user_and_shots, delete_ship, \
+    delete_gift, add_image
 
 urlpatterns = [
+    path('addimage/<int:gift_id>', add_image),
     path('delete/<int:ship_id>', delete_ship, name='delete_ship'),
     path('delete/<int:gift_id>/gift', delete_gift, name='delete_gift'),
     path('delete/<int:access_id>/acc', delete_user_and_shots, name='delete_user_and_shots'),
     path('add_shots/<int:board_id>', shots, name='add_shot'),
     path('add_ship/<int:board_id>', add_ship, name='add_ship'),
     path('delete/<int:board_id>/board', delete_field, name='delete_field'),
-    path('createboard',create_board, name='createboard'),
+    path('createboard', create_board, name='createboard'),
     path('editfields/<int:board_id>/info', edit_fields, name='editfields'),
     path('battle/<int:board_id>/play', battle_page, name='battle'),
-    path('creategift/',create_gift),
-    path('settingsgift/', settings_gift),
+    path('creategift/', create_gift),
+    path('settingsgift/', settings_gift, name='settingsgift'),
     path('users/', users_page),
     path('fields/', fields, name="fields"),
     path('user/registration/', registration),
@@ -42,5 +45,10 @@ urlpatterns = [
     path('seabattle/', SeaBattle_page),
     path('mygifts/', mygift_page),
     path('login/', auth_views.LoginView.as_view()),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout')
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

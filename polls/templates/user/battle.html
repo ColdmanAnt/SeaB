@@ -11,10 +11,9 @@
                     <p>Описание игры:</p>
                     <p>{{ description }}</p>
                 </div>
-                <p> Размер доски: {{ board.size }}</p>
-                <p> Количество выстрелов: {{ access.shots }}</p>
                 <div class="card-body">
-                </div>
+                    <p> Размер доски: {{ board.size }} x {{ board.size }}</p>
+                    <p> Количество выстрелов: {{ access.shots }}</p>
                     <form method="post" action="/battle/{{ board.id }}/play">
                         {% csrf_token %}
                             <div class="mb-3 row">
@@ -31,32 +30,43 @@
                                     <input type="number" max="{{ board.size }}" min="1" name="y">
                                     <br>
                                 </div>
-
                             </div>
-
+                        <br>
+                        {% if action %}
+                            {{ action }}
+                        {% endif %}
+                        <br>
+                        <br>
+                        {% if win %}
+                            <ul>
+                                <p> Ваш приз:</p>
+                                {% for w in win %}
+                                    <li> {{ w.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <br>
+                        <br>
                         {% if access.shots > 0 %}
                         <div class="col-4">
                             <input type="submit" class="btn btn-primary" value="Выстрелить">
                         </div>
                         {% else %}
-                            <a href="/">Выйти</a>
+                        <p> Итоги игры:</p>
+                        {% if results %}
+                            <p>Вы выиграли:</p>
+                            <ul>
+                                {% for res in results %}
+                                    <li>{{res.name}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="col-4">
+                                 <p>К сожалению вы ничего не выиграли. В другой раз точно повезёт</p>
+                            </div>
+                        {% endif %}
                         {% endif %}
                     </form>
-                    {% if action %}
-                        {{ action }}
-                    {% endif %}
-                <br>
-                <br>
-                    {% if win %}
-                        <ul>
-                            <p> Вы выйграли:</p>
-                            {% for w in win %}
-                                <li> {{ w.name }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                <br>
-                <br>
                 <br>
                 <br>
                     {% if errors %}
@@ -68,10 +78,11 @@
                     {% endif %}
                 <br>
                 <br>
-                <a href="/">Выйти</a>
+                <a href="/seabattle">Вернуться к списку игровых полей</a>
 
                 </div>
                 </div>
             </div>
+     </div>
 {% endblock %}
 
