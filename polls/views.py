@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 
-from polls.models import Gifts, Board, Ship, BoardAccess, GiftWinners, MyShots, Image, MyResults
+from polls.models import Gifts, Board, Ship, BoardAccess, GiftWinners, MyShots, Image, MyResults, MyGifts
 from polls.forms import GiftForm, BoardForm, ShipForm, ShotForm, BattleForm, ImageForm
 from django.contrib.auth.models import User
 description = 'Web-игра морской бой. Используйте начисленные Вам выстрелы. При попадании в корабль Вы получаете гарантированный приз.'
@@ -42,21 +42,11 @@ def SeaBattle_page(request):
 def mygift_page(request):
     context = {}
     errors = []
-    if not request.user.is_authenticated:
-        errors.append('Для дальнейших действий зарегестрируйтесь')
-    if len(errors) > 0:
+    gifts = MyGifts.objects.filter(user=request.user.id)
+    if len(gifts) == 0:
+        errors.append('У вас нет призов')
         context['errors'] = errors
-    gifts = Gifts.objects.all()
-    gifts_winn = GiftWinners.objects.all()
-    my_gifts = []
-
-    for gift in gifts_winn:
-        if gift.winner_id == request.user.id:
-            for gi in gifts:
-                if gi.id == gift.gift_id:
-                    my_gifts.append(gi)
-    context['my_gifts'] = my_gifts
-
+    context['my_gifts'] = MyGifts.objects.filter(user=request.user.id)
     return render(request, 'user/MyGifts.html', context)
 
 
@@ -107,7 +97,7 @@ def delete_field(request, board_id):
             if ship.board_id == board_id:
                 ship.delete()
         board.delete()
-
+        return redirect('/fields/')
     return render(request, 'admin/fields.html', context)
 
 
@@ -132,16 +122,28 @@ def delete_user_and_shots(request, access_id):
 @staff_member_required
 def delete_gift(request, gift_id):
     context = {}
-    try:
-        gift = Gifts.objects.get(id=gift_id)
-    except:
+    errors = []
+    boards = Board.objects.all()
+    is_exist = True
+    gift = Gifts.objects.get(id=gift_id)
+    for board in boards:
+        ships = Ship.objects.filter(board_id=board.id)
+        for ship in ships:
+            if ship.gift_id == gift_id:
+                is_exist = False
+    if is_exist:
+        gift.delete()
+        for ship in ships:
+            if ship.gift_id == gift_id:
+                ship.delete()
+        return redirect('/settingsgift/')
+    else:
+        errors.append('Данный приз связан с кораблем, который уже размещён на игровом поле. Вы сможете его удалить, предварительно удалив все корабли связанные с ним')
+        context['errors'] = errors
         return render(request, 'admin/settings_gift.html', context)
-    ships = Ship.objects.all()
-    for ship in ships:
-        if ship.gift_id == gift_id:
-            ship.delete()
-    gift.delete()
-    return redirect('/settingsgift/')
+
+
+
 
 
 @staff_member_required
@@ -159,8 +161,9 @@ def delete_ship(request, ship_id):
             'Данное поле используется пользователями. Вы сможете его изменить, как только игра будет окончена')
         context['errors'] = errors
     if is_not_playing:
+            board_id = ship.board_id
             ship.delete()
-            return redirect(f'/add_ship/{acc.board_id}')
+            return redirect(f'/add_ship/{board_id}')
     return render(request, 'admin/AddShip.html', context)
 
 
@@ -272,6 +275,16 @@ def edit_fields(request, board_id):
     return render(request, 'admin/edit_fields.html', context)
 
 
+
+
+
+@staff_member_required
+def settings_gift(request):
+    context = {}
+    context['history'] = Gifts.objects.all()
+    return render(request, 'admin/settings_gift.html', context)
+
+
 @staff_member_required
 def edit_gift(request, gift_id):
     context = {}
@@ -280,10 +293,11 @@ def edit_gift(request, gift_id):
     context['current_gift'] = current_gift
     errors = []
     if request.method == "POST":
-        form = GiftForm(request.POST)
+        form = GiftForm(request.POST, request.FILES)
         if form.is_valid():
             name = form.cleaned_data['name']
             description = form.cleaned_data['description']
+            img = form.cleaned_data['Img']
             for gift in gifts:
                 if gift.name == name:
                     errors.append('Приз с данным названием уже существует, пожалуйста введите другое название')
@@ -292,85 +306,36 @@ def edit_gift(request, gift_id):
             else:
                 current_gift.name = name
                 current_gift.description = description
+                current_gift.Img = img
                 current_gift.save()
+    else:
+        form = GiftForm()
+        context['form'] = form
 
     return render(request, 'admin/edit_gift.html', context)
-
-
-@staff_member_required
-def settings_gift(request):
-    context = {}
-    im = Image.objects.all()
-    context['image'] = im
-    arr_im = []
-    gifts = Gifts.objects.all()
-    images_array = []
-    g_id = []
-    for img in im:
-        images_array.append(img.gift_id)
-    for gift in gifts:
-        g_id.append(gift.id)
-        if not (gift.id in images_array):
-            record = Image(gift_id=gift.id)
-            record.save()
-    for image in im:
-        if arr_im.count(image.gift_id) == 0:
-            arr_im.append(image.gift_id)
-        else:
-            image.delete()
-        if not (image.gift_id in g_id):
-            image.delete()
-    context['history'] = Gifts.objects.all()
-    return render(request, 'admin/settings_gift.html', context)
 
 
 @staff_member_required
 def create_gift(request):
     context = {}
     gifts = Gifts.objects.all()
-    images = Image.objects.all()
-    images_array = []
-    for img in images:
-        images_array.append(img.gift_id)
     errors = []
     if request.method == "POST":
-        form = GiftForm(request.POST)
+        form = GiftForm(request.POST, request.FILES)
         if form.is_valid():
             name = form.cleaned_data['name']
             description = form.cleaned_data['description']
-            for gift in gifts:
-                if gift.name == name:
-                    errors.append('Приз с данным названием уже существует, пожалуйста введите другое название')
+            img = form.cleaned_data['Img']
             if len(errors) > 0:
                 context['errors'] = errors
             else:
-                record = Gifts(name=name, description=description)
+                record = Gifts(name=name, description=description, Img=img)
                 record.save()
-
-    return render(request, 'admin/Creategift.html', context)
-
-
-def add_image(request, gift_id):
-    images = Image.objects.all()
-    context = {}
-    if request.method == 'POST':
-        form = ImageForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            img = form.cleaned_data['Img']
-            for im in images:
-                if im.gift_id == gift_id:
-                    im.delete()
-            image = Image(gift_id=gift_id, Img=img)
-            image.save()
-            messages.success(request, 'Фотография приза изменена.')
-            return HttpResponseRedirect("/settingsgift/")
-
     else:
-        form = ImageForm()
+        form = GiftForm()
         context['form'] = form
 
-    return render(request, 'admin/addimage.html', context)
+    return render(request, 'admin/Creategift.html', context)
 
 
 def battle_page(request, board_id):
@@ -423,6 +388,8 @@ def battle_page(request, board_id):
                         for gift in gifts:
                             if gift.id == ship.gift_id:
                                 win.append(gift)
+                                record = MyGifts(name=gift.name, description=gift.description, Img=gift.Img, user=request.user.id)
+                                record.save()
                                 for res in my_res:
                                     if res.board_id == board_id and res.user == request.user.id:
                                         is_first_hit = False
@@ -433,10 +400,6 @@ def battle_page(request, board_id):
                                     my_gifts.append(gift.id)
                                     res = MyResults(user=request.user.id, board_id=board_id, gifts_id=my_gifts)
                                     res.save()
-
-                        record = GiftWinners(gift_id=ship.gift_id, winner_id=request.user.id)
-                        record.save()
-
                 if is_win:
                     context['win'] = win
                     context['action'] = 'Попадание!'
@@ -458,7 +421,6 @@ def battle_page(request, board_id):
                         my_win.append(g)
                 if is_win_something:
                     context['results'] = my_win
-                errors.append('Выстрелы закончились! Попытайте удачу в другой раз')
                 arr = []
                 recent_sh.delete()
                 for res in my_res:

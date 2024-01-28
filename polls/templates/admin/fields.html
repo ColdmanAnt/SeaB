@@ -3,6 +3,7 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
+            <br>
             {% if errors %}
                 <p> Найдены ошибки:</p>
                     <ul>
@@ -10,8 +11,8 @@
                             <li> {{ error }}</li>
                         {% endfor %}
                     </ul>
-            <input type=button class="btn btn-primary" value="Вернуться к редактированию" onClick="javascript:history.go(-1);">
-            {% endif %}
+            <input type=button class="btn btn-primary" value="Вернуться к списку полей" onClick="javascript:history.go(-1);">
+            {% else %}
         <div class="row">
                         <div class="col">
                             <p><b> Список игровых полей: </b></p>
@@ -46,6 +47,7 @@
                     {% endfor %}
                 </table>
                 </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

@@ -2,7 +2,17 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
+            <br>
             <div class="card">
+                {% if errors %}
+                        <p> Найдены ошибки:</p>
+                        <ul>
+                            {% for error in errors %}
+                                <li> {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    <input type=button class="btn btn-primary" value="Вернуться к списку призов" onClick="javascript:history.go(-1);">
+                {% else %}
                 <div class="card-header">
                     <div class="row">
                         <div class="col">
@@ -23,9 +33,9 @@
                         <td><b>Название приза</b></td>
                         <td><b>Описание приза</b></td>
                         <td><b>Редактировать приз</b></td>
-                        <td><b>Изменить изображение</b></td>
-                        <td><b>Удалить</b></td>
                         <td><b>Изображение</b></td>
+                        <td><b>Удалить</b></td>
+
                     </tr>
                     {% for gift in history %}
                         <tr>
@@ -33,20 +43,13 @@
                             <td> {{ gift.name }}</td>
                             <td> {{ gift.description }}</td>
                             <td><a href="/editgift/{{ gift.id }}">Перейти</a></td>
-                            <td><a href="/addimage/{{gift.id}}">Изменить изображение</a></td>
+                            <td> <img src="{{ gift.Img.url }}" class="img" width="60" alt="MISSING IMG"> </td>
                             <td><a href="/delete/{{ gift.id }}/gift">Удалить</a></td>
-                            <td>
-                                {% for im in image %}
-                                    {% if im.gift_id == gift.id %}
-                                        <img src="{{ im.Img.url }}" class="img" width="120" alt="MISSING IMG">
-
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
                         </tr>
                     {% endfor %}
                 </table>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>

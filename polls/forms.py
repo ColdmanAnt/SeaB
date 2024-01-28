@@ -13,14 +13,19 @@ class ImageForm(forms.ModelForm):
     )
 
 
-class GiftForm(forms.Form):
-    description = forms.CharField(
-        label='Введите описание приза ',
-        max_length=200
-    )
+class GiftForm(forms.ModelForm):
+    class Meta:
+        model = md.Gifts
+        fields = ['name', 'description', 'Img']
     name = forms.CharField(
-        label='Введите описание приза ',
-        max_length=20
+        label='Название приза:'
+    )
+    description = forms.CharField(
+        label='Описание приза:'
+    )
+    Img = forms.ImageField(
+        label='Изображение:',
+        widget=forms.FileInput()
     )
 
 

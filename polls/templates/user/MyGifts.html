@@ -3,15 +3,15 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
+            <br>
         {% if errors %}
-                <p> Найдены ошибки:</p>
                     <ul>
                         {% for error in errors %}
                             <li> {{ error }}</li>
                         {% endfor %}
                     </ul>
             {% else %}
-            <p> Список всех призов, которые у вас есть:</p>
+            <p> Список ваших призов:</p>
         </div>
     </div>
     <div class="row mt-5">
@@ -20,11 +20,13 @@
             <tr>
                 <td><b>Название приза</b></td>
                 <td><b>Описание приза</b></td>
+                <td><b>Изображение</b></td>
             </tr>
             {% for gift in my_gifts %}
                 <tr>
                     <td> {{ gift.name }}</td>
                     <td> {{ gift.description }}</td>
+                    <td> <img src="{{ gift.Img.url }}" class="img" width="60" alt="MISSING IMG"> </td>
                 </tr>
             {% endfor %}
         </table>

@@ -3,6 +3,7 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
+            <br>
             <div class="card">
                 {% if errors %}
                         <p> Найдены ошибки:</p>
@@ -10,36 +11,22 @@
                             {% for error in errors %}
                                 <li> {{ error }}</li>
                             {% endfor %}
+                            <input type=button class="btn btn-primary" value="Вернуться к созданию приза" onClick="javascript:history.go(-1);">
                         </ul>
                 {% endif %}
                 <div class="card-header">
                     <p><b> Создание приза </b></p>
                 </div>
                 <div class="card-body">
-
-                    <form method="post" action="/creategift/">
-                        {% csrf_token %}
-                            <div class="mb-3 row">
-                                <div class="col-4">
-                                    <label>Название приза</label>
-                                </div>
-                                <div class="col-8">
-                                    <input type="text" required maxlength="20" name="name">
-                                </div>
-                                <div class="col-4">
-                                    <br>
-                                    <label>Описание приза</label>
-                                </div>
-                                <div class="col-8">
-                                    <br>
-                                    <input type="text" required maxlength="200" name="description">
-                                </div>
-                                <div class="col-4">
-                                    <input type="submit" class="btn btn-primary" value="Создать">
-                                </div>
-                            </div>
-                    </form>
+                    <form method = "post" enctype="multipart/form-data">
+                          <div class="panel">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                          </div>
+                          <input type="submit" class="btn btn-primary" value="Загрузить">
+                        </form>
                     <div class="col-4">
+                        <br>
                         <a href="/settingsgift/"><input type="submit" class="btn btn-primary" value="Назад"> </a>
                     </div>
                 </div>

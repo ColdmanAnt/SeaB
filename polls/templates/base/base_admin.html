@@ -117,6 +117,9 @@
                 </ul>
                 <ul class="navbar-nav justify-content-end">
                     <li class="nav-item">
+                        <p class="nav-link" style="color:#FFFFFF">Пользователь: {{ request.user.username }}</p>
+                    </li>
+                    <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-dark">Выйти</button>

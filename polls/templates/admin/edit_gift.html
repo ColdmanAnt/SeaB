@@ -3,7 +3,9 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
+            <br>
             <div class="card">
+
                 {% if errors %}
                         <p> Найдены ошибки:</p>
                         <ul>
@@ -11,45 +13,30 @@
                                 <li> {{ error }}</li>
                             {% endfor %}
                         </ul>
+
                 {% endif %}
                 <div class="card-header">
                     <p><b> Редактирование приза </b></p>
                 </div>
+                <div class="card-header">
+                    <br>
+                    <p><b>Текущее название приза: {{ current_gift.name }}</b></p>
+                    <br>
+                    <p><b>Текущее описание приза: {{ current_gift.description }}</b></p>
+                    <br>
+                    <p><b>Текущее изображение:</b></p>
+                    <img src="{{ current_gift.Img.url }}" class="img" width="60" alt="MISSING IMG">
+                </div>
                 <div class="card-body">
-
-                    <form method="post" action="/editgift/{{ current_gift.id }}">
-                        {% csrf_token %}
-                            <div class="mb-3 row">
-                                <div class="col-4">
-                                    <label> Текущее название приза</label>
-                                    <label>{{ current_gift.name }}</label>
-                                </div>
-                                <div class="col-4">
-                                    <label>Новое название приза</label>
-                                </div>
-                                <div class="col-4">
-                                    <input type="text" required maxlength="20" name="name">
-                                </div>
-                                <div class="col-4">
-                                    <br>
-                                    <label> Текущее описание приза</label>
-                                    <label>{{ current_gift.description }}</label>
-                                </div>
-                                <div class="col-4">
-                                    <br>
-                                    <label>Новое опизание приза</label>
-                                </div>
-                                <div class="col-4">
-                                    <br>
-                                    <input type="text" required maxlength="200" name="description">
-                                </div>
-                                <div class="col-4">
-                                    <input type="submit" class="btn btn-primary" value="Сохранить">
-                                </div>
-
-                            </div>
-                    </form>
+                    <form method = "post" enctype="multipart/form-data">
+                          <div class="panel">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                          </div>
+                          <input type="submit" class="btn btn-primary" value="Сохранить">
+                        </form>
                     <div class="col-4">
+                        <br>
                         <a href="/settingsgift/"><input type="submit" class="btn btn-primary" value="Назад"> </a>
                     </div>
                 </div>

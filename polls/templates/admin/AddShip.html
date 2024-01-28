@@ -5,9 +5,10 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <div class="row mt-5">
         <div class="col mt-3">
+            <br>
             <div class="card">
                 <div class="card-header">
-                    <p><b> Создание кораблей </b></p>
+                    <p><b> Управление кораблями </b></p>
                 </div>
                 {% if errors %}
                         <p> Найдены ошибки:</p>
@@ -17,7 +18,7 @@
                             {% endfor %}
                         </ul>
                         <input type=button class="btn btn-primary" value="Вернуться к редактированию" onClick="javascript:history.go(-1);">
-                        {% endif %}
+                        {% else %}
                 <div class="card-header">
                     <br>
                     <p><b>Название поля: {{ board.name }}</b></p>
@@ -109,6 +110,7 @@
                     </div>
                 </div>
             </div>
+                {% endif %}
         </div>
     </div>
     </div>

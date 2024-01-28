@@ -2,6 +2,7 @@
 {% block content %}
     <div class="row mt-5">
         <div class="col mt-3">
+            <br>
             <div class="card">
                 {% if errors %}
                     <p> Найдены ошибки:</p>
@@ -79,14 +80,19 @@
                                 <div class="col-4">
                                     <input type="submit" class="btn btn-primary" value="Сохранить">
                                 </div>
-
-                    </form>
-                </div>
-                <div class="card-body">
-                    <div class="col-4">
+                         <div class="col-4">
                             <br>
                             <button class="btn btn-primary" onClick="window.location.reload();">Обновить страницу</button>
                         </div>
+                    </form>
+                </div>
+                <div class="card-body">
+
+
+                    <div class="col-4">
+                        <br>
+                        <a href="/fields"><input type="submit" class="btn btn-primary" value="Назад"> </a>
+                    </div>
                 </div>
             </div>
         </div>

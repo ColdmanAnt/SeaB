@@ -18,45 +18,40 @@
                     <p><b>Морской бой</b></p>
                 </div>
                 <div class="card-body">
-                    <p>Описание игры:</p>
+                    <p><b>Описание игры:</b></p>
                     <p>{{ description }}</p>
                 </div>
                 <div class="card-body">
-                    <p> Размер доски: {{ board.size }} x {{ board.size }}</p>
+                    <p> Размерность игрового поля: {{ board.size }} x {{ board.size }}</p>
                     <p> Количество выстрелов: {{ access.shots }}</p>
                     <form method="post" action="/battle/{{ board.id }}/play">
                         {% csrf_token %}
                             <div class="mb-3 row">
                                 <div class="col-12">
-                                    <label>Введите координаты корабля</label>
+                                    <label>Введите координаты выстрела:</label>
                                 </div>
                                 <div class="col-4">
-                                    <label>Введитe x</label>
+                                    <br>
+                                    <label>Координата по горизонтали</label>
                                     <br>
                                     <input type="number" max="{{ board.size }}" min="1" name="x">
                                     <br>
-                                    <label>Введитe y</label>
+                                    <label>Координата по вертикали</label>
                                     <br>
                                     <input type="number" max="{{ board.size }}" min="1" name="y">
                                     <br>
                                 </div>
                             </div>
-                        <br>
                         {% if action %}
                             {{ action }}
                         {% endif %}
-                        <br>
-                        <br>
                         {% if win %}
-                            <ul>
-                                <p> Ваш приз:</p>
+                        <p> Ваш приз:</p>
+
                                 {% for w in win %}
-                                    <li> {{ w.name }}</li>
+                                    <p> {{ w.name }}</p>
                                 {% endfor %}
-                            </ul>
                         {% endif %}
-                        <br>
-                        <br>
                         {% if access.shots > 0 %}
                         <div class="col-4">
                             <input type="submit" class="btn btn-primary" value="Выстрелить">
@@ -77,8 +72,6 @@
                         {% endif %}
                         {% endif %}
                     </form>
-                <br>
-                <br>
                     {% if errors %}
                         <ul>
                             {% for error in errors %}
@@ -86,9 +79,8 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
-                <br>
-                <br>
                 <div class="col-4">
+                    <br>
                         <a href="/seabattle"><input type="submit" class="btn btn-primary" value="Назад"> </a>
                 </div>
                 </div>

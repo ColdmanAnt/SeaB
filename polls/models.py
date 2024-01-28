@@ -9,7 +9,13 @@ class Gift1_History(models.Model):
 
 class Image(models.Model):
     Img = models.ImageField(upload_to='images/', default='/media/images/gift_card.png')
-    gift_id = models.IntegerField()
+
+
+class MyGifts(models.Model):
+    user = models.IntegerField(default=1)
+    name = models.CharField()
+    description = models.CharField()
+    Img = models.ImageField(upload_to='images/', default='images/gift_card.png')
 
 
 class MyResults(models.Model):
@@ -23,6 +29,7 @@ class MyResults(models.Model):
 class Gifts(models.Model):
     name = models.CharField()
     description = models.CharField()
+    Img = models.ImageField(upload_to='images/', default='images/gift_card.png')
 
 
 class GameBoard(models.Model):
