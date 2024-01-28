@@ -4,6 +4,16 @@
      <div class="row mt-5">
         <div class="col mt-3">
             <div class="card">
+                {% if mega_errors %}
+                    <ul>
+                        {% for error in mega_errors %}
+                            <li> {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="col-4">
+                        <a href="/seabattle"><input type="submit" class="btn btn-primary" value="Назад"> </a>
+                    </div>
+                    {% else %}
                 <div class="card-header">
                     <p><b>Морской бой</b></p>
                 </div>
@@ -78,9 +88,11 @@
                     {% endif %}
                 <br>
                 <br>
-                <a href="/seabattle">Вернуться к списку игровых полей</a>
-
+                <div class="col-4">
+                        <a href="/seabattle"><input type="submit" class="btn btn-primary" value="Назад"> </a>
                 </div>
+                </div>
+                {% endif %}
                 </div>
             </div>
      </div>

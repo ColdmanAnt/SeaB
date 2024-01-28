@@ -22,6 +22,7 @@
                         <td><b>Id приза</b></td>
                         <td><b>Название приза</b></td>
                         <td><b>Описание приза</b></td>
+                        <td><b>Редактировать приз</b></td>
                         <td><b>Изменить изображение</b></td>
                         <td><b>Удалить</b></td>
                         <td><b>Изображение</b></td>
@@ -31,6 +32,7 @@
                             <td> {{ gift.id }}</td>
                             <td> {{ gift.name }}</td>
                             <td> {{ gift.description }}</td>
+                            <td><a href="/editgift/{{ gift.id }}">Перейти</a></td>
                             <td><a href="/addimage/{{gift.id}}">Изменить изображение</a></td>
                             <td><a href="/delete/{{ gift.id }}/gift">Удалить</a></td>
                             <td>

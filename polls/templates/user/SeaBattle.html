@@ -20,16 +20,22 @@
 
         <table class="table table-striped">
             <tr>
-                <td><b>Id поля</b></td>
                 <td><b>Название Поля</b></td>
                 <td><b>Размер Поля</b></td>
+                <td><b>Количество выстрелов</b></td>
                 <td><b>Начать игру</b></td>
             </tr>
             {% for board in boards %}
                 <tr>
-                    <td> {{ board.id }}</td>
                     <td> {{ board.name }}</td>
                     <td> {{ board.size }}</td>
+                    <td>
+                        {% for acc in access %}
+                            {% if acc.board_id == board.id %}
+                                {{ acc.shots }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                     <td><a href='/battle/{{ board.id }}/play' style="color: black">Перейти</a></td>
                 </tr>
             {% endfor %}

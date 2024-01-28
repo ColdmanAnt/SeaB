@@ -13,30 +13,40 @@
                         </ul>
                 {% endif %}
                 <div class="card-header">
-                    <p><b> Создание приза </b></p>
+                    <p><b> Редактирование приза </b></p>
                 </div>
                 <div class="card-body">
 
-                    <form method="post" action="/creategift/">
+                    <form method="post" action="/editgift/{{ current_gift.id }}">
                         {% csrf_token %}
                             <div class="mb-3 row">
                                 <div class="col-4">
-                                    <label>Название приза</label>
+                                    <label> Текущее название приза</label>
+                                    <label>{{ current_gift.name }}</label>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-4">
+                                    <label>Новое название приза</label>
+                                </div>
+                                <div class="col-4">
                                     <input type="text" required maxlength="20" name="name">
                                 </div>
                                 <div class="col-4">
                                     <br>
-                                    <label>Описание приза</label>
+                                    <label> Текущее описание приза</label>
+                                    <label>{{ current_gift.description }}</label>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-4">
+                                    <br>
+                                    <label>Новое опизание приза</label>
+                                </div>
+                                <div class="col-4">
                                     <br>
                                     <input type="text" required maxlength="200" name="description">
                                 </div>
                                 <div class="col-4">
-                                    <input type="submit" class="btn btn-primary" value="Создать">
+                                    <input type="submit" class="btn btn-primary" value="Сохранить">
                                 </div>
+
                             </div>
                     </form>
                     <div class="col-4">

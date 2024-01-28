@@ -1,3 +1,5 @@
+import urllib
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
@@ -9,7 +11,7 @@ from django.contrib import messages
 from polls.models import Gifts, Board, Ship, BoardAccess, GiftWinners, MyShots, Image, MyResults
 from polls.forms import GiftForm, BoardForm, ShipForm, ShotForm, BattleForm, ImageForm
 from django.contrib.auth.models import User
-
+description = 'Web-игра морской бой. Используйте начисленные Вам выстрелы. При попадании в корабль Вы получаете гарантированный приз.'
 
 def index_page(request):
     context = {}
@@ -28,6 +30,8 @@ def SeaBattle_page(request):
         context['errors'] = errors
     boards = Board.objects.all()
     game_boards = []
+    acc = BoardAccess.objects.filter(us=request.user.id)
+    context['access'] = acc
     for board in boards:
         if request.user.id in board.users_id:
             game_boards.append(board)
@@ -81,7 +85,10 @@ def check_admin(request):
 def delete_field(request, board_id):
     context = {}
     ships = Ship.objects.all()
-    board = Board.objects.get(id=board_id)
+    try:
+        board = Board.objects.get(id=board_id)
+    except:
+        return render(request, 'admin/fields.html', context)
     acc = BoardAccess.objects.all()
     is_not_playing = True
     errors = []
@@ -90,7 +97,7 @@ def delete_field(request, board_id):
             if access.start_shot != access.shots:
                 is_not_playing = False
     if not is_not_playing:
-        errors.append('На данном поле некоторые игроки начали битву, пока они не доиграют вы не можете его удалить')
+        errors.append('Данное поле используется пользователями. Вы сможете его удалить, как только игра будет окончена')
         context['errors'] = errors
     if is_not_playing:
         for access in acc:
@@ -109,38 +116,51 @@ def delete_user_and_shots(request, access_id):
     context = {}
     is_not_playing = True
     errors = []
-    acc = BoardAccess.objects.all()
-    for access in acc:
-        if access.id == access_id:
-            if access.start_shot != access.shots:
-                is_not_playing = False
+    acc = BoardAccess.objects.get(id=access_id)
+    if acc.start_shot != acc.shots:
+        is_not_playing = False
     if not is_not_playing:
-        errors.append('На данном поле некоторые игроки начали битву, пока они не доиграют вы не можете удалять этих пользователей')
+        errors.append(
+            'Данное поле используется пользователями. Вы сможете его изменить, как только игра будет окончена')
         context['errors'] = errors
     if is_not_playing:
-        for access in acc:
-            if access.id == access_id:
-                access.delete()
+            acc.delete()
+            return redirect(f'/add_shots/{acc.board_id}')
     return render(request, 'admin/addshot.html', context)
 
 
 @staff_member_required
 def delete_gift(request, gift_id):
     context = {}
-    gift = Gifts.objects.get(id=gift_id)
+    try:
+        gift = Gifts.objects.get(id=gift_id)
+    except:
+        return render(request, 'admin/settings_gift.html', context)
     ships = Ship.objects.all()
     for ship in ships:
         if ship.gift_id == gift_id:
             ship.delete()
     gift.delete()
-    return render(request, 'admin/settings_gift.html', context)
+    return redirect('/settingsgift/')
 
 
 @staff_member_required
 def delete_ship(request, ship_id):
     context = {}
+    errors = []
     ship = Ship.objects.get(id=ship_id)
-    ship.delete()
+    acc = BoardAccess.objects.filter(board_id=ship.board_id)
+    is_not_playing = True
+    for access in acc:
+        if access.start_shot != access.shots:
+            is_not_playing = False
+    if not is_not_playing:
+        errors.append(
+            'Данное поле используется пользователями. Вы сможете его изменить, как только игра будет окончена')
+        context['errors'] = errors
+    if is_not_playing:
+            ship.delete()
+            return redirect(f'/add_ship/{acc.board_id}')
     return render(request, 'admin/AddShip.html', context)
 
 
@@ -167,7 +187,7 @@ def add_ship(request, board_id):
             if access.start_shot != access.shots:
                 is_not_playing = False
     if not is_not_playing:
-        errors.append('На данном поле некоторые игроки начали битву, пока они не доиграют вы не можете удалять этих пользователей ')
+        errors.append('Данное поле используется пользователями. Вы сможете его изменить, как только игра будет окончена')
 
     if request.method == "POST":
         form = ShipForm(request.POST)
@@ -183,7 +203,8 @@ def add_ship(request, board_id):
                 errors.append('Неправильный id, данного приза не существует')
             for ship in ships:
                 if ship.x == x and ship.y == y:
-                    errors.append('Корабль с данными координатами уже существует на данном поле, пожалуйста введите другие координаты')
+                    errors.append(
+                        'Корабль с данными координатами уже существует на данном поле, пожалуйста введите другие координаты')
             if len(errors) > 0:
                 context['errors'] = errors
             else:
@@ -197,12 +218,6 @@ def create_board(request):
     context = {}
     all_users = User.objects.values()
     context['users'] = all_users
-    description = '''
-                web-игра морской бой. За каждую
-                покупку на определенную сумму, будут начисляться бонусные
-                выстрелы. Эти выстрелы можно тратить на поле морского боя и,
-                если вы попадете в корабль, то получаете какой-либо гарантированный приз.
-                '''
     context['description'] = description
     if request.method == "POST":
         form = BoardForm(request.POST)
@@ -211,8 +226,6 @@ def create_board(request):
             size = form.cleaned_data['size']
             record = Board(name=name, size=size, users_id=[])
             record.save()
-        else:
-            print('aaaaaa')
     return render(request, 'admin/create_board.html', context)
 
 
@@ -229,12 +242,6 @@ def edit_fields(request, board_id):
     context = {}
     all_users = User.objects.all()
     context['users'] = all_users
-    description = '''
-                    web-игра морской бой. За каждую
-                    покупку на определенную сумму, будут начисляться бонусные
-                    выстрелы. Эти выстрелы можно тратить на поле морского боя и,
-                    если вы попадете в корабль, то получаете какой-либо гарантированный приз.
-                    '''
     context['description'] = description
     board = Board.objects.get(id=board_id)
     context['board'] = board
@@ -251,7 +258,8 @@ def edit_fields(request, board_id):
             if access.start_shot != access.shots:
                 is_not_playing = False
     if not is_not_playing:
-        errors.append('На данном поле некоторые игроки начали битву, пока они не доиграют вы не можете удалять этих пользователей ')
+        errors.append(
+            'На данном поле некоторые игроки начали битву, пока они не доиграют вы не можете ')
     if len(errors) == 0:
         if request.method == "POST":
             form = BoardForm(request.POST)
@@ -262,6 +270,31 @@ def edit_fields(request, board_id):
     else:
         context['errors'] = errors
     return render(request, 'admin/edit_fields.html', context)
+
+
+@staff_member_required
+def edit_gift(request, gift_id):
+    context = {}
+    gifts = Gifts.objects.all()
+    current_gift = Gifts.objects.get(id=gift_id)
+    context['current_gift'] = current_gift
+    errors = []
+    if request.method == "POST":
+        form = GiftForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            for gift in gifts:
+                if gift.name == name:
+                    errors.append('Приз с данным названием уже существует, пожалуйста введите другое название')
+            if len(errors) > 0:
+                context['errors'] = errors
+            else:
+                current_gift.name = name
+                current_gift.description = description
+                current_gift.save()
+
+    return render(request, 'admin/edit_gift.html', context)
 
 
 @staff_member_required
@@ -277,7 +310,7 @@ def settings_gift(request):
         images_array.append(img.gift_id)
     for gift in gifts:
         g_id.append(gift.id)
-        if not(gift.id in images_array):
+        if not (gift.id in images_array):
             record = Image(gift_id=gift.id)
             record.save()
     for image in im:
@@ -285,7 +318,7 @@ def settings_gift(request):
             arr_im.append(image.gift_id)
         else:
             image.delete()
-        if not(image.gift_id in g_id):
+        if not (image.gift_id in g_id):
             image.delete()
     context['history'] = Gifts.objects.all()
     return render(request, 'admin/settings_gift.html', context)
@@ -343,6 +376,7 @@ def add_image(request, gift_id):
 def battle_page(request, board_id):
     context = {}
     acc = BoardAccess.objects.all()
+    mega_errors = []
     for access in acc:
         if access.board_id == board_id:
             acc_obj = access
@@ -353,16 +387,12 @@ def battle_page(request, board_id):
     for rec in recent_sh:
         if rec.user_id == request.user.id and rec.board_id == board_id:
             recent_shots.append(rec)
-    description = '''
-                web-игра морской бой. За каждую\n
-                покупку на определенную сумму, будут начисляться бонусные\n
-                выстрелы. Эти выстрелы можно тратить на поле морского боя и,\n
-                если вы попадете в корабль, то получаете какой-либо гарантированный приз.
-                Совершайте выстрелы и выигрывайте призы, только учтите, что выстрелы ограничены
-                '''
     context['description'] = description
     board = Board.objects.get(id=board_id)
     ships = Ship.objects.filter(board_id=board_id)
+    if len(ships) == 0:
+        mega_errors.append('На данном игровом поле нет кораблей, вы сможете начать игру как только администратор их добавит')
+        context['mega_errors'] = mega_errors
     gifts = Gifts.objects.all()
     field = [''] * board.size * board.size
     context['field'] = field
@@ -419,9 +449,9 @@ def battle_page(request, board_id):
                 results = []
                 is_win_something = False
                 for res in my_res:
-                        if res.board_id == board_id and res.user == request.user.id:
-                            results = res.gifts_id
-                            is_win_something = True
+                    if res.board_id == board_id and res.user == request.user.id:
+                        results = res.gifts_id
+                        is_win_something = True
 
                 for g in gifts:
                     if g.id in results:
@@ -484,6 +514,3 @@ def shots(request, board_id):
                 context['errors'] = errors
 
     return render(request, 'admin/addshot.html', context)
-
-
-

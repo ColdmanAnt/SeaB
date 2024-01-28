@@ -16,7 +16,7 @@ $(document).ready(function() {
         <div class="col mt-3">
             <div class="card">
                 <div class="card-header">
-                    <p><b> Создание приза </b></p>
+                    <p><b> Создание поля </b></p>
                 </div>
                 <div class="card-body">
                     <form method="post" action="{% url 'createboard' %}">
@@ -24,48 +24,31 @@ $(document).ready(function() {
                             <div class="mb-3 row">
                                 <div class="col-4">
                                     <label>Введите название игрового поля:</label>
-                                </div>
-                                <div class="col-8">
+                                    <br>
                                     <input type="text" required maxlength="20" name="name">
                                 </div>
+                                    <div class="col-4">
+                                        <label>Введите размерность поля (от 4 до 12):</label>
+                                        <br>
+                                        <input type="number" required max="12" min="4" name="size">
+                                    </div>
                                 <div class="col-8">
                                     <div class="col-4">
+                                        <br>
                                         <label>Опизание игры:</label>
                                         <br>
                                         <br>
                                         <p> {{ description }}</p>
                                     </div>
-
                                 </div>
-                                <div class="col-8">
-                                    <div class="col-4">
-                                        <label>Введите размер поля:</label>
-                                        <br>
-                                        <input type="number" required max="12" min="4" name="size">
-                                    </div>
                                 </div>
                                 <br>
-                                <p> Список пользователей:</p>
-                                <div class="card-body">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td><b>Id пользователя</b></td>
-                                            <td><b>Имя пользователя</b></td>
-                                        </tr>
-                                        {% for user in users %}
-                                            <tr>
-                                                <td> {{ user.id }}</td>
-                                                <td> {{ user.username }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </table>
-                                </div>
-
                                 <div class="col-4">
-                                    <input type="submit" class="btn btn-primary" value="Создать">
+                                    <a href="/fields"><input type="submit" class="btn btn-primary" value="Создать"> </a>
                                 </div>
-                            </div>
                     </form>
+                    <br>
+                    <a href="/fields"><input type="submit" class="btn btn-primary" value="Назад"> </a>
                 </div>
             </div>
         </div>

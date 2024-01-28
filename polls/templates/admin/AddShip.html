@@ -9,6 +9,21 @@
                 <div class="card-header">
                     <p><b> Создание кораблей </b></p>
                 </div>
+                {% if errors %}
+                        <p> Найдены ошибки:</p>
+                        <ul>
+                            {% for error in errors %}
+                                <li> {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        <input type=button class="btn btn-primary" value="Вернуться к редактированию" onClick="javascript:history.go(-1);">
+                        {% endif %}
+                <div class="card-header">
+                    <br>
+                    <p><b>Название поля: {{ board.name }}</b></p>
+                    <br>
+                    <p><b>Размерность игрового поля: {{ board.size }}</b></p>
+                </div>
                 <div class="card-body">
                     <div>
                         <p> Список кораблей на данном поле:</p>
@@ -16,10 +31,10 @@
                     <div class="card-body">
                 <table class="table table-striped">
                     <tr>
-                        <td><b>Ship x</b></td>
-                        <td><b> Ship y</b></td>
-                        <td><b> Ship gift id</b></td>
-                        <td><b> Delete </b></td>
+                        <td><b>Координата по горизонтали</b></td>
+                        <td><b>Координата по вертикали</b></td>
+                        <td><b>Id приза</b></td>
+                        <td><b>Удалить</b></td>
                     </tr>
                     {% for ship in ships %}
                         <tr>
@@ -42,7 +57,7 @@
                     <tr>
                         <td><b>Id приза</b></td>
                         <td><b>Название приза</b></td>
-                        <td><b>Описание Приза</b></td>
+                        <td><b>Описание приза</b></td>
                     </tr>
                     {% for gift in gifts %}
                         <tr>
@@ -53,22 +68,25 @@
                     {% endfor %}
                 </table>
                 </div>
+
                     <form method="post" action="/add_ship/{{ board.id }}">
                         {% csrf_token %}
                             <div class="mb-3 row">
                                 <div class="col-12">
-                                    <label>Введите координаты корабля</label>
+                                    <label>Введите координаты корабля:</label>
                                 </div>
-                                <div class="col-4">
-                                    <label>Введитe x</label>
+                                <br>
+                                <div class="col-8">
+                                    <label>Координата по горизонтали</label>
                                     <br>
                                     <input type="number" max="{{ board.size }}" min="1" name="x">
                                     <br>
-                                    <label>Введитe y</label>
+                                    <label>Координата по вертикали</label>
                                     <br>
                                     <input type="number" max="{{ board.size }}" min="1" name="y">
                                     <br>
-                                    <label>Введитe id приза</label>
+                                    <label>Id приза</label>
+                                    <br>
                                     <input type="number"  name="gift_id">
 
                                 </div>
@@ -76,17 +94,19 @@
                             </div>
 
                         <div class="col-4">
-                                            <input type="submit" class="btn btn-primary" value="Создать">
+                            <input type="submit" class="btn btn-primary" value="Создать">
+
                         </div>
-                        {% if errors %}
-                        <p> Найдены ошибки:</p>
-                        <ul>
-                            {% for error in errors %}
-                                <li> {{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
+                        <div class="col-4">
+                            <br>
+                            <button class="btn btn-primary" onClick="window.location.reload();">Обновить страницу</button>
+                        </div>
+
                     </form>
+                        <div class="col-4">
+                            <br>
+                            <a href="/fields"><input type="submit" class="btn btn-primary" value="Назад"> </a>
+                    </div>
                 </div>
             </div>
         </div>

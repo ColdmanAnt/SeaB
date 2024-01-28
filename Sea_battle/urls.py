@@ -22,9 +22,10 @@ from Sea_battle import settings
 from polls.views import index_page, SeaBattle_page, mygift_page, registration, fields, users_page, edit_fields, \
     settings_gift, \
     create_gift, create_board, battle_page, delete_field, add_ship, shots, delete_user_and_shots, delete_ship, \
-    delete_gift, add_image
+    delete_gift, add_image, edit_gift
 
 urlpatterns = [
+    path('editgift/<int:gift_id>', edit_gift, name='edit_gift'),
     path('addimage/<int:gift_id>', add_image),
     path('delete/<int:ship_id>', delete_ship, name='delete_ship'),
     path('delete/<int:gift_id>/gift', delete_gift, name='delete_gift'),
