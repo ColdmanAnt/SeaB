@@ -17,7 +17,7 @@
                 {% endif %}
                 <div class="card-header">
                     <p><b> Редактирование приза </b></p>
-                </div>
+                </div><!--
                 <div class="card-header">
                     <br>
                     <p><b>Текущее название приза: {{ current_gift.name }}</b></p>
@@ -26,13 +26,31 @@
                     <br>
                     <p><b>Текущее изображение:</b></p>
                     <img src="{{ current_gift.Img.url }}" class="img" width="60" alt="MISSING IMG">
-                </div>
+                </div>-->
                 <div class="card-body">
                     <form method = "post" enctype="multipart/form-data">
-                          <div class="panel">
                             {% csrf_token %}
-                            {{ form.as_p }}
-                          </div>
+                              <div class="col-8">
+                                    <div class="col-4">
+                                        <label>Название приза:</label>
+                                        <br>
+                                        <input value="{{ current_gift.name }}" type="text" name="name">
+                                    </div>
+                                </div>
+                              <div class="col-8">
+                                    <div class="col-4">
+                                        <label>Описание приза:</label>
+                                        <br>
+                                        <input value="{{ current_gift.description }}" type="text" name="description">
+                                    </div>
+                                </div>
+                              <div class="col-8">
+                                    <div class="col-4">
+                                        <label for="id_Img">Изображение:</label>
+                                        <br>
+                                        <input type="file" name="Img" accept="image/*" required="" id="id_Img">
+                                    </div>
+                                </div>
                           <input type="submit" class="btn btn-primary" value="Сохранить">
                         </form>
                     <div class="col-4">

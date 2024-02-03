@@ -1,0 +1,79 @@
+{% extends 'base/base_admin.html' %}
+{% block content %}
+<div class="row mt-5">
+    <div class="col mt-3">
+        <br>
+        <div class="card">
+            {% if errors %}
+                        <p> Найдены ошибки:</p>
+                        <ul>
+                            {% for error in errors %}
+                                <li> {{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    <input type=button class="btn btn-primary" value="Вернуться к списку призов" onClick="javascript:history.go(-1);">
+            {% else %}
+            <form method="post" action='/usersgifts/'>
+                {% csrf_token %}
+                <label>Введите имя пользователя:</label>
+                <input type="text" name="username">
+                <input type="submit" class="btn btn-primary" value="Применить">
+                <a href="/settingsgift/"><input type="submit" class="btn btn-primary" value="Сбросить"> </a>
+            </form>
+            {% if gifts %}
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <p><b> Список призов {{ user }}:</b></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-striped">
+                    <tr>
+                        <td><b>Id приза</b></td>
+                        <td><b>Название приза</b></td>
+                        <td><b>Описание приза</b></td>
+                        <td><b>Изображение</b></td>
+
+                    </tr>
+                    {% for gift in gifts %}
+                    <tr>
+                        <td> {{ gift.id }}</td>
+                        <td> {{ gift.name }}</td>
+                        <td> {{ gift.description }}</td>
+                        <td><img src="{{ gift.Img.url }}" class="img" width="60" alt="MISSING IMG"></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% else %}
+                <div class="card-body">
+
+                <table class="table table-striped">
+                    <tr>
+                        <td><b>Id приза</b></td>
+                        <td><b>Название приза</b></td>
+                        <td><b>Описание приза</b></td>
+                        <td><b>Изображение</b></td>
+
+                    </tr>
+                    {% for gift in history %}
+                    <tr>
+                        <td> {{ gift.id }}</td>
+                        <td> {{ gift.name }}</td>
+                        <td> {{ gift.description }}</td>
+                        <td><img src="{{ gift.Img.url }}" class="img" width="60" alt="MISSING IMG"></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

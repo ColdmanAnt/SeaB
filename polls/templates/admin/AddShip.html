@@ -89,20 +89,21 @@
                                     <label>Id приза</label>
                                     <br>
                                     <input type="number"  name="gift_id">
-
                                 </div>
-
                             </div>
-
                         <div class="col-4">
                             <input type="submit" class="btn btn-primary" value="Создать">
-
+                            <script>
+                                if ( window.history.replaceState ) {
+                                    window.history.replaceState( null, null, window.location.href );
+                                }
+                            </script>
+                            {% if update %}
+                                    <script>
+                                        window.location.reload();
+                                    </script>
+                            {% endif %}
                         </div>
-                        <div class="col-4">
-                            <br>
-                            <button class="btn btn-primary" onClick="window.location.reload();">Обновить страницу</button>
-                        </div>
-
                     </form>
                         <div class="col-4">
                             <br>

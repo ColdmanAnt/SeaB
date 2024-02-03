@@ -2,6 +2,10 @@ from polls import models as md
 from django import forms
 
 
+class Filter(forms.Form):
+    username = forms.CharField()
+
+
 class ImageForm(forms.ModelForm):
     class Meta:
         model = md.Image
@@ -41,12 +45,6 @@ class BoardForm(forms.Form):
     )
 
 
-class EditForm(forms.Form):
-    number = forms.IntegerField(
-        label='Введите id поля которого хотите редактировать',
-    )
-
-
 class ShipForm(forms.Form):
     x = forms.IntegerField()
     y = forms.IntegerField()
@@ -61,3 +59,20 @@ class ShotForm(forms.Form):
 class BattleForm(forms.Form):
     x = forms.IntegerField()
     y = forms.IntegerField()
+
+
+class EditGiftForm(forms.Form):
+    name = forms.CharField(
+        max_length=20
+    )
+    description = forms.CharField(
+        max_length=200
+    )
+    Img = forms.ImageField(
+        label='Изображение',
+        widget=forms.FileInput()
+    )
+
+
+
+

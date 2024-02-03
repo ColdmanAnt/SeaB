@@ -78,12 +78,22 @@
                                 </div>
                                 <br>
                                 <div class="col-4">
-                                    <input type="submit" class="btn btn-primary" value="Сохранить">
-                                </div>
+                                     <input type="submit" class="btn btn-primary"   value="Сохранить">
+                                        <script>
+                                            if ( window.history.replaceState ) {
+                                                window.history.replaceState( null, null, window.location.href );
+                                            }
+                                        </script>
+                                    {% if update %}
+                                        <script>
+                                            window.location.reload();
+                                        </script>
+                                    {% endif %}
+                                </div><!--
                          <div class="col-4">
                             <br>
-                            <button class="btn btn-primary" onClick="window.location.reload();">Обновить страницу</button>
-                        </div>
+                             <button class="btn btn-primary" onClick="window.location.reload();">Обновить страницу</button>
+                        </div>-->
                     </form>
                 </div>
                 <div class="card-body">

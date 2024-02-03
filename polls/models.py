@@ -8,7 +8,7 @@ class Gift1_History(models.Model):
 
 
 class Image(models.Model):
-    Img = models.ImageField(upload_to='images/', default='/media/images/gift_card.png')
+    Img = models.ImageField(upload_to='images/', default='images/gift_card.png')
 
 
 class MyGifts(models.Model):

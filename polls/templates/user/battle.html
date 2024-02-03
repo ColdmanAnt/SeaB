@@ -1,6 +1,59 @@
 {% extends 'base/base_user.html' %}
 {% load static %}
 {% block content %}
+<!--
+<script>
+    $("td").on("mouseover", function(){
+        $(this).addClass("cel-active");
+    });
+    $("td").on("mouseout", function(){
+        $(this).removeClass("cel-active");
+    });
+
+    $("td").on("click", function(){
+        alert(table)
+    });
+</script>
+
+<script>
+
+window.onload = function(){
+const parser = new DOMParser();
+const table = document.getElementById('id_table').innerHTML = parser.parseFromString('#id_table', 'text/html')
+}
+</script>-->
+<!--
+<script type="text/javascript" language="javascript">
+	function call() {
+	var msg   = $('#formx').serialize();
+		$.ajax({
+			// Метод передачи
+			type: 'GET',
+			 // Файл которому передаем запрос и получаем ответ
+			url: '/field/',
+			 // Кеширование
+			cache: false,
+			 // Верямя ожидания ответа, в мили секундах 1000 мс = 1 сек
+			timeout:3000,
+			data: msg,
+			// Функция сработает при успешном получении данных
+			success: function(data) {
+				// Отображаем данные в форме
+				$('#field').html(data);
+			},
+			// Функция срабатывает в период ожидания данных
+			beforeSend: function(data) {
+				$('#field').html('<p>Ожидание данных...</p>');
+			},
+			 // Тип данных
+			dataType:"html",
+			 // Функция сработает в случае ошибки
+			error:  function(data){
+				$('#field').html('<p>Возникла неизвестная ошибка. Пожалуйста, попробуйте чуть позже...</p>');
+				}
+			});
+		}
+		</script>-->
      <div class="row mt-5">
         <div class="col mt-3">
             <div class="card">
@@ -21,9 +74,15 @@
                     <p><b>Описание игры:</b></p>
                     <p>{{ description }}</p>
                 </div>
+
                 <div class="card-body">
                     <p> Размерность игрового поля: {{ board.size }} x {{ board.size }}</p>
                     <p> Количество выстрелов: {{ access.shots }}</p>
+                    <!--
+                    <div id="field">
+                        Здесь пока ничего нет
+                    </div>
+                    <input type="button" value="Нажать" onclick="call();">-->
                     <form method="post" action="/battle/{{ board.id }}/play">
                         {% csrf_token %}
                             <div class="mb-3 row">

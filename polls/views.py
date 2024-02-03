@@ -1,17 +1,16 @@
-import urllib
-
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
-from django.contrib import messages
 
-from polls.models import Gifts, Board, Ship, BoardAccess, GiftWinners, MyShots, Image, MyResults, MyGifts
-from polls.forms import GiftForm, BoardForm, ShipForm, ShotForm, BattleForm, ImageForm
+from polls.models import Gifts, Board, Ship, BoardAccess, MyShots, MyResults, MyGifts
+from polls.forms import GiftForm, BoardForm, ShipForm, ShotForm, BattleForm, Filter
 from django.contrib.auth.models import User
+
 description = 'Web-игра морской бой. Используйте начисленные Вам выстрелы. При попадании в корабль Вы получаете гарантированный приз.'
+
 
 def index_page(request):
     context = {}
@@ -114,8 +113,8 @@ def delete_user_and_shots(request, access_id):
             'Данное поле используется пользователями. Вы сможете его изменить, как только игра будет окончена')
         context['errors'] = errors
     if is_not_playing:
-            acc.delete()
-            return redirect(f'/add_shots/{acc.board_id}')
+        acc.delete()
+        return redirect(f'/add_shots/{acc.board_id}')
     return render(request, 'admin/addshot.html', context)
 
 
@@ -138,12 +137,10 @@ def delete_gift(request, gift_id):
                 ship.delete()
         return redirect('/settingsgift/')
     else:
-        errors.append('Данный приз связан с кораблем, который уже размещён на игровом поле. Вы сможете его удалить, предварительно удалив все корабли связанные с ним')
+        errors.append \
+            ('Данный приз связан с кораблем, который уже размещён на игровом поле. Вы сможете его удалить, предварительно удалив все корабли связанные с ним')
         context['errors'] = errors
         return render(request, 'admin/settings_gift.html', context)
-
-
-
 
 
 @staff_member_required
@@ -161,9 +158,9 @@ def delete_ship(request, ship_id):
             'Данное поле используется пользователями. Вы сможете его изменить, как только игра будет окончена')
         context['errors'] = errors
     if is_not_playing:
-            board_id = ship.board_id
-            ship.delete()
-            return redirect(f'/add_ship/{board_id}')
+        board_id = ship.board_id
+        ship.delete()
+        return redirect(f'/add_ship/{board_id}')
     return render(request, 'admin/AddShip.html', context)
 
 
@@ -190,7 +187,8 @@ def add_ship(request, board_id):
             if access.start_shot != access.shots:
                 is_not_playing = False
     if not is_not_playing:
-        errors.append('Данное поле используется пользователями. Вы сможете его изменить, как только игра будет окончена')
+        errors.append \
+            ('Данное поле используется пользователями. Вы сможете его изменить, как только игра будет окончена')
 
     if request.method == "POST":
         form = ShipForm(request.POST)
@@ -213,6 +211,7 @@ def add_ship(request, board_id):
             else:
                 record = Ship(x=x, y=y, board_id=board_id, gift_id=gift_id)
                 record.save()
+                context['update'] = True
     return render(request, 'admin/AddShip.html', context)
 
 
@@ -275,9 +274,6 @@ def edit_fields(request, board_id):
     return render(request, 'admin/edit_fields.html', context)
 
 
-
-
-
 @staff_member_required
 def settings_gift(request):
     context = {}
@@ -291,6 +287,11 @@ def edit_gift(request, gift_id):
     gifts = Gifts.objects.all()
     current_gift = Gifts.objects.get(id=gift_id)
     context['current_gift'] = current_gift
+    initial_gift = {
+        "name": current_gift.name,
+        "description": current_gift.description,
+        "Img": current_gift.Img
+    }
     errors = []
     if request.method == "POST":
         form = GiftForm(request.POST, request.FILES)
@@ -308,6 +309,7 @@ def edit_gift(request, gift_id):
                 current_gift.description = description
                 current_gift.Img = img
                 current_gift.save()
+                return redirect('/settingsgift/')
     else:
         form = GiftForm()
         context['form'] = form
@@ -331,6 +333,7 @@ def create_gift(request):
             else:
                 record = Gifts(name=name, description=description, Img=img)
                 record.save()
+                return redirect('/settingsgift/')
     else:
         form = GiftForm()
         context['form'] = form
@@ -340,12 +343,15 @@ def create_gift(request):
 
 def battle_page(request, board_id):
     context = {}
+
     acc = BoardAccess.objects.all()
     mega_errors = []
     for access in acc:
         if access.board_id == board_id:
             acc_obj = access
             break
+
+
     context['access'] = acc_obj
     recent_sh = MyShots.objects.all()
     recent_shots = []
@@ -354,9 +360,21 @@ def battle_page(request, board_id):
             recent_shots.append(rec)
     context['description'] = description
     board = Board.objects.get(id=board_id)
+
+    tbl = '<table>'
+    for i in range(board.size):
+        tbl += '<tr>'
+        for j in range(board.size):
+            tbl += f'<td>{j}</td>'
+        tbl += '</tr>'
+    tbl += '</table>'
+    context['table'] = tbl
+    context['a'] = 'a222'
+
     ships = Ship.objects.filter(board_id=board_id)
     if len(ships) == 0:
-        mega_errors.append('На данном игровом поле нет кораблей, вы сможете начать игру как только администратор их добавит')
+        mega_errors.append \
+            ('На данном игровом поле нет кораблей, вы сможете начать игру как только администратор их добавит')
         context['mega_errors'] = mega_errors
     gifts = Gifts.objects.all()
     field = [''] * board.size * board.size
@@ -388,7 +406,8 @@ def battle_page(request, board_id):
                         for gift in gifts:
                             if gift.id == ship.gift_id:
                                 win.append(gift)
-                                record = MyGifts(name=gift.name, description=gift.description, Img=gift.Img, user=request.user.id)
+                                record = MyGifts(name=gift.name, description=gift.description, Img=gift.Img,
+                                                 user=request.user.id)
                                 record.save()
                                 for res in my_res:
                                     if res.board_id == board_id and res.user == request.user.id:
@@ -472,7 +491,36 @@ def shots(request, board_id):
                 record = BoardAccess(shots=shot_count, board_id=board_id, us=user, start_shot=shot_count)
                 record.save()
                 board.save()
+                context['update'] = True
             else:
                 context['errors'] = errors
 
     return render(request, 'admin/addshot.html', context)
+
+
+def field(request):
+    context = {}
+    array = []
+    return render(request, 'field.html', context)
+
+
+def users_gift(request):
+    context = {}
+    errors = []
+    all_users = User.objects.all()
+    if request.method == "POST":
+        form = Filter(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            is_exist = False
+            for us in all_users:
+                if us.username == username:
+                    context['gifts'] = MyGifts.objects.filter(user=us.id)
+                    context['user'] = username
+                    is_exist = True
+                    break
+            if not is_exist:
+                errors.append('Пользователя с данным именем не существует, либо данный пользователь не выйграл ни одного приза')
+                context['errors'] = errors
+    context['history'] = Gifts.objects.all()
+    return render(request, 'admin/users_gift.html', context)
