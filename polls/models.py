@@ -3,11 +3,11 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 
-class Gift1_History(models.Model):
+class Gift1_History(models.Model):# не нужно#
     a = models.IntegerField()
 
 
-class Image(models.Model):
+class Image(models.Model):# не нужно#
     Img = models.ImageField(upload_to='images/', default='images/gift_card.png')
 
 
@@ -32,7 +32,7 @@ class Gifts(models.Model):
     Img = models.ImageField(upload_to='images/', default='images/gift_card.png')
 
 
-class GameBoard(models.Model):
+class GameBoard(models.Model):# не нужно#
     size = models.IntegerField()
     name = models.CharField()
     users_id = ArrayField(
@@ -45,6 +45,7 @@ class Board(models.Model):
     name = models.CharField()
     users_id = ArrayField(
         models.IntegerField(blank=True),
+        default=[]
     )
 
 
@@ -63,7 +64,7 @@ class BoardAccess(models.Model):
     start_shot = models.IntegerField()
 
 
-class GiftWinners(models.Model):
+class GiftWinners(models.Model):  # не нужно#
     gift_id = models.IntegerField()
     winner_id = models.IntegerField()
 

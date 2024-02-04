@@ -1,6 +1,4 @@
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
@@ -287,11 +285,6 @@ def edit_gift(request, gift_id):
     gifts = Gifts.objects.all()
     current_gift = Gifts.objects.get(id=gift_id)
     context['current_gift'] = current_gift
-    initial_gift = {
-        "name": current_gift.name,
-        "description": current_gift.description,
-        "Img": current_gift.Img
-    }
     errors = []
     if request.method == "POST":
         form = GiftForm(request.POST, request.FILES)
@@ -300,7 +293,7 @@ def edit_gift(request, gift_id):
             description = form.cleaned_data['description']
             img = form.cleaned_data['Img']
             for gift in gifts:
-                if gift.name == name:
+                if gift.name == name and gift_id != current_gift.id:
                     errors.append('Приз с данным названием уже существует, пожалуйста введите другое название')
             if len(errors) > 0:
                 context['errors'] = errors
@@ -487,8 +480,8 @@ def shots(request, board_id):
             if not is_exist:
                 errors.append('Пользователя с таким id не существует в базе данных')
             if len(errors) == 0:
-                board.users_id.append(user)
                 record = BoardAccess(shots=shot_count, board_id=board_id, us=user, start_shot=shot_count)
+                board.users_id.append(user)
                 record.save()
                 board.save()
                 context['update'] = True
